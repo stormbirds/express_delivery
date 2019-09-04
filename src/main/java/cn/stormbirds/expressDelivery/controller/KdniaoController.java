@@ -1,13 +1,23 @@
 package cn.stormbirds.expressDelivery.controller;
 
+import cn.stormbirds.expressDelivery.entity.ExpressTracking;
+import cn.stormbirds.expressDelivery.entity.LogisticCodeBean;
+import cn.stormbirds.expressDelivery.entity.LogisticsTrackingSubBean;
+import cn.stormbirds.expressDelivery.response.ResultJson;
+import cn.stormbirds.expressDelivery.service.IExpressTrackingService;
+import cn.stormbirds.expressDelivery.service.LogisticsTrackingService;
+import cn.stormbirds.expressDelivery.utils.ExcelUtils;
 import cn.stormbirds.expressDelivery.utils.KdniaoUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 /**
  * <p>
@@ -17,14 +27,17 @@ import java.time.format.DateTimeFormatter;
  * @author StormBirds Email：xbaojun@gmail.com
  * @since 2019/9/3 14:29
  */
+@Api(value = "快递鸟接口控制器")
 @Slf4j
-@RequestMapping(value = "/app/v1")
+@RequestMapping(value = "")
 @RestController
 public class KdniaoController {
 
     private String AppKey = "f0c1ba54-540c-491f-a18c-8cb01f6346dc";
+    @Autowired
+    private IExpressTrackingService expressTrackingService;
 
-    @PostMapping(value = "/logisticsTrackingCallBack")
+    @PostMapping(value = "/app/v1/logisticsTrackingCallBack")
     public String logisticsTrackingCallBack(String RequestData, String RequestType, String DataSign) {
         log.info("接收到物流跟踪推送消息 {} {} {}", RequestData, RequestType, DataSign);
         try {
@@ -35,6 +48,11 @@ public class KdniaoController {
         String retStr = "{\"EBusinessID\": \"1575163\",\"UpdateTime\": \"" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "\",\"Success\": true,\"Reason\": \"\"}";
         log.info("返回报文 {}", retStr);
         return retStr;
+    }
+
+    @PostMapping(value = "/app/v1/orderTracesSubByJson")
+    public ResultJson orderTracesSubByJson(@RequestBody ExpressTracking subBean){
+        return ResultJson.ok(expressTrackingService.subLogisticsTracking(subBean));
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -57,13 +58,41 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //登录接口放行
                 .antMatchers("/api/v1/login",
                         "/api/v1/sign",
-                        "/app/v1/**","/auth/login","/auth/register").permitAll()
+                        "/app/v1/**","/auth/login","/auth/register",
+                        "/error/**").permitAll()
                 //其他接口全部接受验证
                 .anyRequest().authenticated();
 
         //使用自定义的 Token过滤器 验证请求的Token是否合法
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
         http.headers().cacheControl();
+    }
+
+    @Override
+    public void configure(WebSecurity web) {
+        web
+                .ignoring()
+                .antMatchers(
+                        "swagger-ui.html",
+                        "**/swagger-ui.html",
+                        "/favicon.ico",
+                        "/**/*.css",
+                        "/**/*.js",
+                        "/**/*.png",
+                        "/**/*.gif",
+                        "/swagger-resources/**",
+                        "/v2/**",
+                        "/**/*.ttf",
+                        "/**/*.woff2",
+                        "/**/*.woff"
+                );
+        web
+                .ignoring().antMatchers("/v2/api-docs",
+                "/swagger-resources/configuration/ui",
+                "/swagger-resources",
+                "/swagger-resources/configuration/security",
+                "/swagger-ui.html"
+        );
     }
 
     @Bean

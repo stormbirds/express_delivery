@@ -1,84 +1,64 @@
 package cn.stormbirds.expressDelivery.entity;
 
-
-import org.springframework.security.core.userdetails.UserDetails;
-
+import java.time.LocalDateTime;
 import java.io.Serializable;
-import java.util.List;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
-public class User implements UserDetails , Serializable {
+/**
+ * <p>
+ * 
+ * </p>
+ *
+ * @author stormbirds
+ * @since 2019-09-04
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+@ApiModel(value="User对象", description="")
+public class User implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = "id")
     private Long id;
+
+    @ApiModelProperty(value = "用户名")
     private String username;
+
+    @ApiModelProperty(value = "用户密码")
     private String password;
 
-    private List<Role> authorities;
+    @ApiModelProperty(value = "注册时间")
+    private LocalDateTime createdAt;
 
-    public Long getId() {
-        return id;
-    }
+    @ApiModelProperty(value = "是否启用")
+    private Boolean enabled;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ApiModelProperty(value = "账号是否被锁定")
+    private Boolean accountNonLocked;
 
-    @Override
-    public String getUsername() {
-        return username;
-    }
+    @ApiModelProperty(value = "上次更新密码时间")
+    private LocalDateTime lastPasswordResetDate;
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    @ApiModelProperty(value = "商户手机")
+    private String phone;
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
+    @ApiModelProperty(value = "商户省份")
+    private String province;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    @ApiModelProperty(value = "商户城市")
+    private String city;
 
-    @Override
-    public List<Role> getAuthorities() {
-        return authorities;
-    }
+    @ApiModelProperty(value = "商户地区")
+    private String expArea;
 
-    public void setAuthorities(List<Role> authorities) {
-        this.authorities = authorities;
-    }
+    @ApiModelProperty(value = "详细地址")
+    private String address;
 
-    /**
-     * 用户账号是否过期
-     */
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    /**
-     * 用户账号是否被锁定
-     */
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    /**
-     * 用户密码是否过期
-     */
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    /**
-     * 用户是否可用
-     */
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 
 }

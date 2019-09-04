@@ -1,7 +1,7 @@
 package cn.stormbirds.expressDelivery.utils;
 
 
-import cn.stormbirds.expressDelivery.entity.User;
+import cn.stormbirds.expressDelivery.entity.AuthUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -60,10 +60,10 @@ public class JwtTokenUtil implements Serializable {
      * 验证JWT
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
-        User user = (User) userDetails;
+        AuthUser authUser = (AuthUser) userDetails;
         String username = getUsernameFromToken( token );
 
-        return (username.equals( user.getUsername() ) && !isTokenExpired( token ));
+        return (username.equals( authUser.getUsername() ) && !isTokenExpired( token ));
     }
 
     /**
@@ -78,7 +78,13 @@ public class JwtTokenUtil implements Serializable {
      * 根据token获取username
      */
     public String getUsernameFromToken(String token) {
-        String username = getClaimsFromToken( token ).getSubject();
+        String username;
+        try {
+            final Claims claims = getClaimsFromToken(token);
+            username = claims.getSubject();
+        } catch (Exception e) {
+            username = null;
+        }
         return username;
     }
 
@@ -86,18 +92,29 @@ public class JwtTokenUtil implements Serializable {
      * 获取token的过期时间
      */
     public Date getExpirationDateFromToken(String token) {
-        Date expiration = getClaimsFromToken( token ).getExpiration();
-        return expiration;
+        Date created;
+        try {
+            final Claims claims = getClaimsFromToken(token);
+            created = claims.getIssuedAt();
+        } catch (Exception e) {
+            created = null;
+        }
+        return created;
     }
 
     /**
      * 解析JWT
      */
     private Claims getClaimsFromToken(String token) {
-        Claims claims = Jwts.parser()
-                .setSigningKey( SECRET )
-                .parseClaimsJws( token )
-                .getBody();
+        Claims claims;
+        try {
+            claims = Jwts.parser()
+                    .setSigningKey(SECRET)
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            claims = null;
+        }
         return claims;
     }
 

@@ -1,5 +1,6 @@
 package cn.stormbirds.expressDelivery.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,6 +41,48 @@ public class LogisticsTrackingSubBean {
     private SenderBean Sender;
     private ReceiverBean Receiver;
     private List<CommodityBean> Commodity;
+
+    public LogisticsTrackingSubBean(){}
+
+    public LogisticsTrackingSubBean(ExpressTracking expressTracking,
+                                    String senderName,
+                                    String senderTel,
+                                    String senderMobile,
+                                    String senderProvinceName,
+                                    String senderCityName,
+                                    String senderExpAreaName,
+                                    String senderAddress){
+        ReceiverBean receiverBean = new ReceiverBean();
+        receiverBean.setAddress(expressTracking.getReceiverAddress());
+        receiverBean.setCityName(expressTracking.getReceiverCity());
+        receiverBean.setExpAreaName(expressTracking.getReceiverArea());
+        receiverBean.setMobile(expressTracking.getReceiverPhone());
+        receiverBean.setName(expressTracking.getReceiverName());
+        receiverBean.setProvinceName(expressTracking.getReceiverProvince());
+        receiverBean.setTel("");
+        SenderBean senderBean = new SenderBean();
+        senderBean.setAddress(senderAddress);
+        senderBean.setCityName(senderCityName);
+        senderBean.setExpAreaName(senderExpAreaName);
+        senderBean.setMobile(senderMobile);
+        senderBean.setName(senderName);
+        senderBean.setProvinceName(senderProvinceName);
+        senderBean.setTel(senderTel);
+        List<CommodityBean> commodityBeanList = new ArrayList<>();
+        commodityBeanList.add(new CommodityBean(expressTracking.getItemTitle(),null,null,null,null,null,null));
+        this.ShipperCode = expressTracking.getShipperCode();
+        this.OrderCode = null;
+        this.LogisticCode = expressTracking.getTrackingNo();
+        this.PayType=null;
+        this.ExpType = null;
+        this.CustomerName = null;
+        this.CustomerPwd = null;
+        this.MonthCode = null;
+        this.IsNotice = null;
+        this.Sender = senderBean;
+        this.Receiver = receiverBean;
+        this.Commodity = commodityBeanList;
+    }
 
     public String getShipperCode() {
         return ShipperCode;
@@ -295,6 +338,31 @@ public class LogisticsTrackingSubBean {
          */
 
         private String GoodsName;
+        //String(20)	商品编码	O
+        private String GoodsCode;
+        //	Int(5)	件数	O
+        private Integer Goodsquantity;
+        //	Double(10)	商品价格	O
+        private Double GoodsPrice;
+        //	Double	商品重量kg	O
+        private Double GoodsWeight;
+        //	String(50)	商品描述	O
+        private String GoodsDesc;
+        //	Double	商品体积m3	O
+        private Double GoodsVol;
+
+        public CommodityBean() {
+        }
+
+        public CommodityBean(String goodsName, String goodsCode, Integer goodsquantity, Double goodsPrice, Double goodsWeight, String goodsDesc, Double goodsVol) {
+            GoodsName = goodsName;
+            GoodsCode = goodsCode;
+            Goodsquantity = goodsquantity;
+            GoodsPrice = goodsPrice;
+            GoodsWeight = goodsWeight;
+            GoodsDesc = goodsDesc;
+            GoodsVol = goodsVol;
+        }
 
         public String getGoodsName() {
             return GoodsName;
@@ -302,6 +370,54 @@ public class LogisticsTrackingSubBean {
 
         public void setGoodsName(String GoodsName) {
             this.GoodsName = GoodsName;
+        }
+
+        public String getGoodsCode() {
+            return GoodsCode;
+        }
+
+        public void setGoodsCode(String goodsCode) {
+            GoodsCode = goodsCode;
+        }
+
+        public Integer getGoodsquantity() {
+            return Goodsquantity;
+        }
+
+        public void setGoodsquantity(Integer goodsquantity) {
+            Goodsquantity = goodsquantity;
+        }
+
+        public Double getGoodsPrice() {
+            return GoodsPrice;
+        }
+
+        public void setGoodsPrice(Double goodsPrice) {
+            GoodsPrice = goodsPrice;
+        }
+
+        public Double getGoodsWeight() {
+            return GoodsWeight;
+        }
+
+        public void setGoodsWeight(Double goodsWeight) {
+            GoodsWeight = goodsWeight;
+        }
+
+        public String getGoodsDesc() {
+            return GoodsDesc;
+        }
+
+        public void setGoodsDesc(String goodsDesc) {
+            GoodsDesc = goodsDesc;
+        }
+
+        public Double getGoodsVol() {
+            return GoodsVol;
+        }
+
+        public void setGoodsVol(Double goodsVol) {
+            GoodsVol = goodsVol;
         }
     }
 }

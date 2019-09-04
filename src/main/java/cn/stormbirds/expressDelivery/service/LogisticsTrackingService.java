@@ -1,6 +1,9 @@
 package cn.stormbirds.expressDelivery.service;
 
+import cn.stormbirds.expressDelivery.entity.ExpressTracking;
 import cn.stormbirds.expressDelivery.entity.LogisticsTrackingSubBean;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,12 +16,7 @@ import cn.stormbirds.expressDelivery.entity.LogisticsTrackingSubBean;
 
 
 public interface LogisticsTrackingService {
-    /**
-     * 订阅快递跟踪
-     * @param subBean
-     * @return
-     */
-    boolean subLogisticsTracking(LogisticsTrackingSubBean subBean);
+
 
     /**
      * 处理快递跟踪轨迹查询结果

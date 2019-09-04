@@ -1,6 +1,7 @@
 package cn.stormbirds.expressDelivery.filter;
 
 
+import cn.stormbirds.expressDelivery.entity.AuthUser;
 import cn.stormbirds.expressDelivery.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,13 +38,14 @@ public class JwtTokenFilter extends OncePerRequestFilter {
         if (null != token) {
             String username = jwtTokenUtil.getUsernameFromToken(token);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+                AuthUser userDetails = (AuthUser) this.userDetailsService.loadUserByUsername(username);
                 if (jwtTokenUtil.validateToken(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(
                             request));
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    request.setAttribute("user",userDetails);
                 }
             }
         }

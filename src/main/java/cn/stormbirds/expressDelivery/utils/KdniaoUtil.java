@@ -37,7 +37,7 @@ public class KdniaoUtil {
             '4', '5', '6', '7', '8', '9', '+', '/' };
 
     public static String base64Encode(byte[] data) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int len = data.length;
         int i = 0;
         int b1, b2, b3;
@@ -68,18 +68,17 @@ public class KdniaoUtil {
         return sb.toString();
     }
 
-    private String urlEncoder(String str, String charset) throws UnsupportedEncodingException{
-        String result = URLEncoder.encode(str, charset);
-        return result;
+    public static String urlEncoder(String str, String charset) throws UnsupportedEncodingException{
+        return URLEncoder.encode(str, charset);
     }
 
     private static String MD5(String str, String charset) throws Exception {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(str.getBytes(charset));
         byte[] result = md.digest();
-        StringBuffer sb = new StringBuffer(32);
-        for (int i = 0; i < result.length; i++) {
-            int val = result[i] & 0xff;
+        StringBuilder sb = new StringBuilder(32);
+        for (byte aResult : result) {
+            int val = aResult & 0xff;
             if (val <= 0xf) {
                 sb.append("0");
             }
@@ -95,7 +94,6 @@ public class KdniaoUtil {
      * @throws UnsupportedEncodingException
      */
     private static String base64(String str, String charset) throws UnsupportedEncodingException{
-        String encoded = base64Encode(str.getBytes(charset));
-        return encoded;
+        return base64Encode(str.getBytes(charset));
     }
 }

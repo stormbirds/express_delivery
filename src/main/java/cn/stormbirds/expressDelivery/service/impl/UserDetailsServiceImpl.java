@@ -2,8 +2,8 @@ package cn.stormbirds.expressDelivery.service.impl;
 
 
 
+import cn.stormbirds.expressDelivery.entity.AuthUser;
 import cn.stormbirds.expressDelivery.entity.Role;
-import cn.stormbirds.expressDelivery.entity.User;
 import cn.stormbirds.expressDelivery.mapper.RoleMapper;
 import cn.stormbirds.expressDelivery.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +23,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private RoleMapper roleMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    public AuthUser loadUserByUsername(String userName) throws UsernameNotFoundException {
         //查数据库
-        User user = userMapper.loadUserByUsername( userName );
-        if (null != user) {
-            List<Role> roles = roleMapper.getRolesByUserId( user.getId() );
-            user.setAuthorities( roles );
+        AuthUser authUser = userMapper.loadUserByUsername( userName );
+        if (null != authUser) {
+            List<Role> roles = roleMapper.getRolesByUserId( authUser.getId() );
+            authUser.setAuthorities( roles );
         }
-        return user;
+        return authUser;
     }
 }
