@@ -17,12 +17,21 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,13 +56,18 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
      * 电商加密私钥，快递鸟提供，注意保管，不要泄漏
      */
     private String AppKey = "f0c1ba54-540c-491f-a18c-8cb01f6346dc";
+    //测试私钥
+//    private String AppKey = "bae0c504-1b92-494a-a184-2a3863159916";
 
     /**
      * 测试请求url
      */
-    private String ReqURL = "http://testapi.kdniao.com:8081/api/dist";
-    //正式请求url
-    //private String ReqURL = "http://api.kdniao.com/api/dist";
+//    private String ReqURL = "http://testapi.kdniao.com:8081/api/dist";
+    //物流跟踪正式请求url
+//    private String ReqURL = "http://api.kdniao.com/api/dist";
+    //即时查询API
+    private String ReqURL = "http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx";
+//    private String ReqURL = "http://sandboxapi.kdniao.com:8080/kdniaosandbox/gateway/exterfaceInvoke.json";
 
     @Autowired
     private RestTemplate restTemplate;
@@ -68,30 +82,27 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
         this.idService = idService;
     }
 
+    @Async("asyncPoolTaskExecutor")
     @Override
-    public List<ExpressTracking> importByExcel(MultipartFile file) {
-        AuthUser user = SysUtil.getCurrentUser();
-        if (user == null) {
-            throw new RuntimeException("未找到用户");
-        }
+    public List<ExpressTracking> importByExcel(MultipartFile file, Long userId) {
         List<LogisticCodeBean> logisticCodeBeans = ExcelUtils.readExcel(LogisticCodeBean.class, file);
         if (logisticCodeBeans.size() > 0) {
             List<ExpressTracking> expressTrackingList = logisticCodeBeans.stream()
                     .filter(logisticCodeBean -> getOne(Wrappers.<ExpressTracking>lambdaQuery()
-                            .eq(ExpressTracking::getPlatformId, "")
+                            .eq(ExpressTracking::getPlatformId, userId)
                             .eq(ExpressTracking::getPlatformOrderId, logisticCodeBean.getOrderId())) == null)
                     .map(logisticCodeBean -> {
-                        String LogisticCode = logisticCodeBean.getLogisticCode().startsWith(SHIPPER_CODE_YTO) ?
+                        String logisticCode = logisticCodeBean.getLogisticCode().startsWith(SHIPPER_CODE_YTO) ?
                                 logisticCodeBean.getLogisticCode().substring(SHIPPER_CODE_YTO.length()) :
                                 logisticCodeBean.getLogisticCode();
-                        if (LogisticCode.startsWith(SHIPPER_CODE_ZTO)) {
-                            LogisticCode = LogisticCode.substring(SHIPPER_CODE_ZTO.length());
+                        if (logisticCode.startsWith(SHIPPER_CODE_ZTO)) {
+                            logisticCode = logisticCode.substring(SHIPPER_CODE_ZTO.length());
                         }
                         return ExpressTracking.builder()
                                 .id(idService.getId()).itemNum(Integer.valueOf(logisticCodeBean.getItemCount()))
                                 .itemTitle(logisticCodeBean.getItemName())
                                 .logisticStatus(LOGISTIC_STATUS_UNKNOWN)
-                                .platformId(user.getId())
+                                .platformId(userId)
                                 .platformOrderId(logisticCodeBean.getOrderId())
                                 .receiverAddress(logisticCodeBean.getShippingAddress())
                                 .receiverArea(logisticCodeBean.getReceiverArea())
@@ -101,17 +112,21 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
                                 .receiverProvince(logisticCodeBean.getReceiverProvince())
                                 //TODO 这里暂时写死了判断不是圆通则为中通，后面扩展需要更改，因为来源单号物流编码不规范需要做标准物流公司的编码映射
                                 .shipperCode(logisticCodeBean.getLogisticCode().startsWith(SHIPPER_CODE_YTO) ? "YTO" : "ZTO")
-                                .trackingNo(LogisticCode)
+                                .trackingNo(logisticCode)
                                 .trackingStatus(TRACKING_STATUS_RECORD).build();
                     })
                     .collect(Collectors.toList());
-
-            if (saveBatch(expressTrackingList)) {
+            if(expressTrackingList.isEmpty()){
+                return Collections.emptyList();
+            }
+            if (saveOrUpdateBatch(expressTrackingList)) {
                 subLogisticsTracking(expressTrackingList);
                 return expressTrackingList;
+            }else{
+                log.info("保存快递单到数据库失败 {}", JSONObject.toJSONString(expressTrackingList) );
             }
         }
-        return null;
+        return Collections.emptyList();
     }
 
 
@@ -119,31 +134,22 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
     public boolean subLogisticsTracking(ExpressTracking subBean) {
         ExpressTracking expressTrackingTmp = getById(subBean.getId());
         if (expressTrackingTmp != null && expressTrackingTmp.getLogisticStatus() != TRACKING_STATUS_RECORD) {
+            log.info("该订单已订阅 {}",subBean.toString());
             return false;
         }
         String requestData = JSON.toJSONString(new LogisticsTrackingSubBean(subBean,"管理员","17792294757","17792294757","陕西省","西安市","碑林区","十字路口") );
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("EBusinessID", EBusinessID);
-        params.put("RequestType", "1008");
-        try {
-            params.put("RequestData", KdniaoUtil.urlEncoder(requestData, "UTF-8"));
-            String dataSign = KdniaoUtil.encrypt(requestData, AppKey, "UTF-8");
-            params.put("DataSign", KdniaoUtil.urlEncoder(dataSign, "UTF-8"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        //请求、返回数据类型：2-json；
-        params.put("DataType", "2");
-        JSONObject result = restTemplate.postForObject(ReqURL, params, JSONObject.class);
 
-        log.info("物流订单 {} 订阅结果 {}", requestData, result);
+        JSONObject result = kdniaoPost(requestData,"1008",null);
+
 
         if (result != null && result.getBoolean("Success")) {
             subBean.setLogisticStatus(TRACKING_STATUS_RUNNING);
-            save(subBean);
+            updateById(subBean);
+            log.info("物流订单：{} 订阅成功：{}", requestData, result);
             return true;
         } else {
             //TODO 这里push消息给用户提醒用户订阅失败
+            log.info("物流订单：{} 订阅失败：{}", requestData, result);
         }
         return false;
     }
@@ -156,5 +162,90 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
         }
     }
 
+    @Override
+    public JSONObject trackQuery(String shipperCode, String logisticCode, String orderCode) {
+        String requestData = "{\"OrderCode\": \""+orderCode+"\",\"ShipperCode\": \""+ shipperCode + "\",\"LogisticCode\": \""+ logisticCode +"\"}" ;
+        return kdniaoPost(requestData,"1002","2");
+    }
+
+    private JSONObject kdniaoPost(String requestData,String requestType,String dataType){
+
+        Map<String, String> params = new HashMap<>(16);
+        params.put("EBusinessID", EBusinessID);
+        params.put("RequestType", requestType);
+        try {
+            params.put("RequestData", KdniaoUtil.urlEncoder(requestData, "UTF-8"));
+            String dataSign = KdniaoUtil.encrypt(requestData, AppKey, "UTF-8");
+            params.put("DataSign", KdniaoUtil.urlEncoder(dataSign, "UTF-8"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //请求、返回数据类型：2-json；
+        params.put("DataType", "2");
+        return JSONObject.parseObject(sendPost(ReqURL,params));
+    }
+
+    private String sendPost(String url, Map<String, String> params) {
+        OutputStreamWriter out = null;
+        BufferedReader in = null;
+        StringBuilder result = new StringBuilder();
+        try {
+            URL realUrl = new URL(url);
+            HttpURLConnection conn =(HttpURLConnection) realUrl.openConnection();
+            // 发送POST请求必须设置如下两行
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            // POST方法
+            conn.setRequestMethod("POST");
+            // 设置通用的请求属性
+            conn.setRequestProperty("accept", "*/*");
+            conn.setRequestProperty("connection", "Keep-Alive");
+            conn.setRequestProperty("user-agent",
+                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            conn.connect();
+            // 获取URLConnection对象对应的输出流
+            out = new OutputStreamWriter(conn.getOutputStream(), "UTF-8");
+            // 发送请求参数
+            if (params != null) {
+                StringBuilder param = new StringBuilder();
+                for (Map.Entry<String, String> entry : params.entrySet()) {
+                    if(param.length()>0){
+                        param.append("&");
+                    }
+                    param.append(entry.getKey());
+                    param.append("=");
+                    param.append(entry.getValue());
+                }
+                out.write(param.toString());
+            }
+            // flush输出流的缓冲
+            out.flush();
+            // 定义BufferedReader输入流来读取URL的响应
+            in = new BufferedReader(
+                    new InputStreamReader(conn.getInputStream(), "UTF-8"));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result.append(line);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //使用finally块来关闭输出流、输入流
+        finally{
+            try{
+                if(out!=null){
+                    out.close();
+                }
+                if(in!=null){
+                    in.close();
+                }
+            }
+            catch(IOException ex){
+                ex.printStackTrace();
+            }
+        }
+        return result.toString();
+    }
 
 }

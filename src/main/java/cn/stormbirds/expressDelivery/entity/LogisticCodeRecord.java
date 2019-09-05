@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
@@ -23,6 +23,8 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
+@NoArgsConstructor
+@AllArgsConstructor
 @ApiModel(value="LogisticCodeRecord对象", description="")
 public class LogisticCodeRecord implements Serializable {
 
@@ -52,7 +54,7 @@ public class LogisticCodeRecord implements Serializable {
     private String callback;
 
     @ApiModelProperty(value = "预计到达时间yyyy-mm-dd")
-    private LocalDate estimatedDeliveryTime;
+    private LocalDateTime estimatedDeliveryTime;
 
 
 }

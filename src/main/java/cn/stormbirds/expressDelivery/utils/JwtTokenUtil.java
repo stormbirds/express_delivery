@@ -39,9 +39,11 @@ public class JwtTokenUtil implements Serializable {
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>(16);
         claims.put( CLAIM_KEY_USERNAME, userDetails.getUsername() );
+        claims.put(Claims.ISSUED_AT,new Date());
         return Jwts.builder()
                 .setClaims( claims )
-                .setExpiration( new Date( Instant.now().toEpochMilli() + EXPIRATION_TIME  ) )
+                .setIssuedAt(new Date())
+                .setExpiration( new Date( System.currentTimeMillis() + EXPIRATION_TIME  ) )
                 .signWith( SignatureAlgorithm.HS512, SECRET )
                 .compact();
     }
@@ -49,9 +51,11 @@ public class JwtTokenUtil implements Serializable {
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>(16);
         claims.put( CLAIM_KEY_USERNAME, username );
+        claims.put(Claims.ISSUED_AT,new Date());
         return Jwts.builder()
                 .setClaims( claims )
-                .setExpiration( new Date( Instant.now().toEpochMilli() + EXPIRATION_TIME  ) )
+                .setIssuedAt(new Date())
+                .setExpiration( new Date( System.currentTimeMillis() + EXPIRATION_TIME  ) )
                 .signWith( SignatureAlgorithm.HS512, SECRET )
                 .compact();
     }
@@ -71,7 +75,8 @@ public class JwtTokenUtil implements Serializable {
      */
     public Boolean isTokenExpired(String token) {
         Date expiration = getExpirationDateFromToken( token );
-        return expiration.before( new Date() );
+        boolean isExpired = expiration.before( new Date() );
+        return isExpired;
     }
 
     /**
@@ -92,14 +97,14 @@ public class JwtTokenUtil implements Serializable {
      * 获取token的过期时间
      */
     public Date getExpirationDateFromToken(String token) {
-        Date created;
+        Date expirationDate;
         try {
             final Claims claims = getClaimsFromToken(token);
-            created = claims.getIssuedAt();
+            expirationDate = claims.getExpiration();
         } catch (Exception e) {
-            created = null;
+            expirationDate = null;
         }
-        return created;
+        return expirationDate;
     }
 
     /**
