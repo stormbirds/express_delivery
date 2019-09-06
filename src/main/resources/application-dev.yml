@@ -1,5 +1,20 @@
 
 spring:
+  security:
+    ignore: /**
   datasource:
     driver-class-name: com.p6spy.engine.spy.P6SpyDriver
     url: jdbc:p6spy:mysql://localhost:3306/express_db?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true
+  mail:
+    host: smtp.126.com #SMTP服务器地址
+    username:  dimasi_jlb #登陆账号
+    password: woyehua19872005 #登陆密码（或授权码）
+    properties:
+      from: dimasi_jlb@126.com
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/templates/,classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+kdniao:
+  EBusinessID: 1575163
+  AppKey: f0c1ba54-540c-491f-a18c-8cb01f6346dc

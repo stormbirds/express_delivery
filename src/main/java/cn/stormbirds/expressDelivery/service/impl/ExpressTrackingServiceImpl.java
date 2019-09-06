@@ -1,34 +1,26 @@
 package cn.stormbirds.expressDelivery.service.impl;
 
-import cn.stormbirds.expressDelivery.entity.AuthUser;
-import cn.stormbirds.expressDelivery.entity.ExpressTracking;
-import cn.stormbirds.expressDelivery.entity.LogisticCodeBean;
-import cn.stormbirds.expressDelivery.entity.LogisticsTrackingSubBean;
+import cn.stormbirds.expressDelivery.entity.*;
 import cn.stormbirds.expressDelivery.mapper.ExpressTrackingMapper;
-import cn.stormbirds.expressDelivery.service.GetIdService;
-import cn.stormbirds.expressDelivery.service.IExpressTrackingService;
-import cn.stormbirds.expressDelivery.service.LogisticsTrackingService;
+import cn.stormbirds.expressDelivery.service.*;
 import cn.stormbirds.expressDelivery.utils.ExcelUtils;
 import cn.stormbirds.expressDelivery.utils.KdniaoUtil;
-import cn.stormbirds.expressDelivery.utils.SysUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Collections;
@@ -37,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static cn.stormbirds.expressDelivery.entity.KdNiaoRequestType.INSTANT_QUERY;
+import static cn.stormbirds.expressDelivery.entity.KdNiaoRequestType.LOGISTICS_TRACKING_SUB;
 import static cn.stormbirds.expressDelivery.utils.CommonParameters.*;
 
 /**
@@ -50,24 +44,16 @@ import static cn.stormbirds.expressDelivery.utils.CommonParameters.*;
 @Slf4j
 @Service
 public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMapper, ExpressTracking> implements IExpressTrackingService {
-    //电商ID
-    private String EBusinessID = "1575163";
+    /**
+     * 电商ID
+     */
+    @Value(value = "${kdniao.EBusinessID}")
+    private String EBusinessID ;
     /**
      * 电商加密私钥，快递鸟提供，注意保管，不要泄漏
      */
-    private String AppKey = "f0c1ba54-540c-491f-a18c-8cb01f6346dc";
-    //测试私钥
-//    private String AppKey = "bae0c504-1b92-494a-a184-2a3863159916";
-
-    /**
-     * 测试请求url
-     */
-//    private String ReqURL = "http://testapi.kdniao.com:8081/api/dist";
-    //物流跟踪正式请求url
-//    private String ReqURL = "http://api.kdniao.com/api/dist";
-    //即时查询API
-    private String ReqURL = "http://api.kdniao.com/Ebusiness/EbusinessOrderHandle.aspx";
-//    private String ReqURL = "http://sandboxapi.kdniao.com:8080/kdniaosandbox/gateway/exterfaceInvoke.json";
+    @Value(value = "${kdniao.AppKey}")
+    private String AppKey ;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -75,14 +61,16 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
     private final GetIdService idService;
     @Autowired
     private LogisticsTrackingService logisticsTrackingService;
-
+    @Autowired
+    private SendMailService mailService;
+    @Autowired
+    private IUserService userService;
 
     @Autowired
     public ExpressTrackingServiceImpl(GetIdService idService) {
         this.idService = idService;
     }
 
-    @Async("asyncPoolTaskExecutor")
     @Override
     public List<ExpressTracking> importByExcel(MultipartFile file, Long userId) {
         List<LogisticCodeBean> logisticCodeBeans = ExcelUtils.readExcel(LogisticCodeBean.class, file);
@@ -120,13 +108,12 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
                 return Collections.emptyList();
             }
             if (saveOrUpdateBatch(expressTrackingList)) {
-                subLogisticsTracking(expressTrackingList);
                 return expressTrackingList;
             }else{
                 log.info("保存快递单到数据库失败 {}", JSONObject.toJSONString(expressTrackingList) );
             }
         }
-        return Collections.emptyList();
+        return null;
     }
 
 
@@ -137,9 +124,10 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
             log.info("该订单已订阅 {}",subBean.toString());
             return false;
         }
+        User user = userService.getById(subBean.getPlatformId());
         String requestData = JSON.toJSONString(new LogisticsTrackingSubBean(subBean,"管理员","17792294757","17792294757","陕西省","西安市","碑林区","十字路口") );
 
-        JSONObject result = kdniaoPost(requestData,"1008",null);
+        JSONObject result = kdniaoPost(requestData,LOGISTICS_TRACKING_SUB,null);
 
 
         if (result != null && result.getBoolean("Success")) {
@@ -150,29 +138,26 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
         } else {
             //TODO 这里push消息给用户提醒用户订阅失败
             log.info("物流订单：{} 订阅失败：{}", requestData, result);
+            mailService.sendMail(MailVo.builder()
+                    .to(user.getEmail())
+                    .subject(String.format("快递单号 %s (平台订单号 %s )订阅失败",subBean.getTrackingNo(),subBean.getPlatformOrderId()) )
+                    .text(String.format("你有快递单号在订阅物流追踪时失败，请检查。失败原因 %s 。详细数据 %s。",result,subBean.toString()))
+                    .build());
         }
         return false;
-    }
-
-    @Async("asyncPoolTaskExecutor")
-    @Override
-    public void subLogisticsTracking(List<ExpressTracking> expressTrackingList) {
-        for (ExpressTracking expressTracking : expressTrackingList) {
-            subLogisticsTracking(expressTracking);
-        }
     }
 
     @Override
     public JSONObject trackQuery(String shipperCode, String logisticCode, String orderCode) {
         String requestData = "{\"OrderCode\": \""+orderCode+"\",\"ShipperCode\": \""+ shipperCode + "\",\"LogisticCode\": \""+ logisticCode +"\"}" ;
-        return kdniaoPost(requestData,"1002","2");
+        return kdniaoPost(requestData,INSTANT_QUERY,"2");
     }
 
-    private JSONObject kdniaoPost(String requestData,String requestType,String dataType){
+    private JSONObject kdniaoPost(String requestData, KdNiaoRequestType requestType, String dataType){
 
         Map<String, String> params = new HashMap<>(16);
         params.put("EBusinessID", EBusinessID);
-        params.put("RequestType", requestType);
+        params.put("RequestType", requestType.getRequestCode());
         try {
             params.put("RequestData", KdniaoUtil.urlEncoder(requestData, "UTF-8"));
             String dataSign = KdniaoUtil.encrypt(requestData, AppKey, "UTF-8");
@@ -182,7 +167,7 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
         }
         //请求、返回数据类型：2-json；
         params.put("DataType", "2");
-        return JSONObject.parseObject(sendPost(ReqURL,params));
+        return JSONObject.parseObject(sendPost(requestType.getReqUrl(),params));
     }
 
     private String sendPost(String url, Map<String, String> params) {

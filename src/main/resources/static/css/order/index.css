@@ -1,0 +1,38 @@
+.order-top .layui-form-item, .order-top .layui-form-item .layui-inline {
+    margin-bottom: 0;
+}
+
+.detail-table a {
+    color: #01AAED;
+    margin-left: 10px;
+}
+/*弹出层样式*/
+.changebox, .videobox, .bindbox{
+    display: none;
+}
+.changebox .layui-form-item{
+    margin-top: 10px;
+}
+.changebox label{
+    width:100px;
+}
+
+.inputblock{
+    width:82%;
+}
+.layui-form-item .areaInput{
+    width:181px;
+}
+/*设备管理页面*/
+.shopmain{
+    padding:0 20px;
+}
+.shopTitle{
+    font-size:22px;
+    border-bottom:1px solid #ccc;
+    height:44px;
+    line-height: 44px;
+}
+.shopmain .layui-table-view img{
+    width:50px;
+}

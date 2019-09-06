@@ -1,0 +1,213 @@
+body,html{
+    width:100%;
+    height:100%;
+}
+.loginBody{
+    background-image: url("../img/loginImg/loginImg.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+.image{
+
+}
+.loginBox{
+    width:650px;
+    height:584px;
+    position:fixed;
+    top:50%;
+    margin-top:-325px;
+    left:50%;
+    margin-left:-292px;
+}
+.loginMain{
+    width:100%;
+    background: rgba(225,225,225,0.3);
+    border-radius: 4px;
+    padding: 10px 38px;
+    height: 100%;
+    box-sizing: border-box;
+}
+.box_top{
+    margin-top:35px;
+}
+.box_top p{
+    font-size: 44px;
+    width: 100%;
+    text-align: left;
+    height: 60px;
+    line-height: 60px;
+    color: #fff;
+    letter-spacing:5px
+}
+.box_top span{
+    font-size: 24px;
+    color:#fff;
+    line-height: 1.5;
+    letter-spacing:2px
+}
+.main-left{
+    width:250px;
+    padding-right: 20px;
+    border-right: 1px solid #62829d;
+}
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: #fff;
+}
+
+input:-moz-placeholder, textarea:-moz-placeholder {
+    color: #fff;
+}
+
+input::-moz-placeholder, textarea::-moz-placeholder {
+    color: #fff;
+    font-size: 16px;
+}
+
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    color: #fff;
+}
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+}
+.loginInput{
+    margin-bottom: 60px;
+    height: 60px;
+    border:1px solid #fff;
+    border-radius: 4px;
+}
+.loginInput img{
+    width: 34px;
+    height: 34px;
+    margin-left: 15px;
+    margin-top: 4px;
+}
+.loginInput input{
+    height: 100%;
+    background: rgba(204,204,204,0);
+    color: #fff;
+    border: none;
+    padding: 0 10px;
+    width: 385px;
+    margin-bottom: 0!important;
+    margin-right: 0!important;
+    box-sizing: border-box;
+}
+.loginBtn .layui-btn-normal{
+    background-color:#77c7ea;
+    height: 60px;
+    line-height: 60px;
+    font-size: 24px;
+}
+.codeInput{
+    width:186px;
+    margin: 0 auto;
+}
+.loginInput, .codeInput {
+    margin-top: 20px;
+}
+.codeInput input{
+    width:95px;
+    height: 30px;
+    line-height: 30px;
+    background: #123a43;
+    color: #fff;
+    border:none;
+    padding: 0 10px;
+}
+.codeInput img{
+    margin-left:10px;
+    width:56px;
+    height:30px;
+    border:none;
+}
+.loginBtn a{
+    width: 100%;
+    border-radius: 4px;
+}
+.loginBtn {
+    margin-top: 30px;
+}
+.main-right{
+    margin-left: 10px;
+}
+.main-right p, .main-right span{
+    text-align: center;
+    display: block;
+}
+.main-right span{
+    font-size:15px;
+    color:#fff;
+    height: 40px;
+    line-height: 40px;
+}
+.main-right p{
+    font-size:18px;
+    color:#ccc;
+    height:30px;
+    line-height: 30px;
+}
+.main-right img{
+    width:130px;
+    height: 130px;
+    display: block;
+    margin: 0 auto;
+}
+
+/*注册流程*/
+.regtitle{
+    width: 800px;
+    margin: 20px auto;
+}
+.regtitle p{
+    font-size:32px;
+    height:54px;
+    line-height: 54px;
+    color:#1E9FFF;
+}
+.regtitle p label{
+    font-size:18px;
+    margin-left:10px;
+    color:#FF5722;
+}
+.stepbox{
+    width:600px;
+    margin: 60px  auto 0 auto;
+}
+.stepline{
+    margin-top:10px;
+    padding-left:88px;
+}
+.stepline .layui-timeline-item{
+    width:200px;
+}
+.stepline .layui-timeline-item:before{
+    width:100%;
+    height:1px;
+}
+.stepline .layui-timeline-item .layui-timeline-axis{
+    left: 0;
+    top: -10px;
+}
+.step li {
+    width: 130px;
+    text-align: center;
+    margin-left:58px;
+}
+.stepline .item-last{
+    width: 0px;
+}
+.registerForm{
+    width:480px;
+    margin: 0 auto;
+}
+.registerForm .registInp{
+    width: 300px;
+}
+.regBtn{
+    width:300px;
+    margin: 0 auto;
+}
+.regBtn a{
+    width: 47%;
+    border-radius: 4px;
+}

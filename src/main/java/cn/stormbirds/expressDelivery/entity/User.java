@@ -60,5 +60,6 @@ public class User implements Serializable {
     @ApiModelProperty(value = "详细地址")
     private String address;
 
-
+    @ApiModelProperty(value = "用户邮件地址，默认用来接收快递单报警信息")
+    private String email;
 }

@@ -1,0 +1,52 @@
+.breadcrumb{
+	height:44px;
+	line-height: 44px;
+	font-size:18px;
+	display: block;
+	padding:0 10px;
+}
+.userdata{
+	padding:10px;
+}
+.userdata ul{
+	box-sizing: border-box;
+	border-bottom:1px solid #ccc;
+}
+.userdata li img{
+	width:80px;
+	height:80px;
+	float:left;
+	margin-right: 20px;
+	margin-top: 8px;
+}
+.userdata li div{
+	float:left;
+}
+.userdata li{
+	overflow: hidden;
+	box-sizing: border-box;
+}
+.userdata li p{
+	height:32px;
+	line-height: 32px;
+}
+.userinput{
+	margin-top:10px;
+	width:800px;
+}
+.userinput .layui-form-label{
+	text-align: left;
+}
+.userinput .layui-form-item button{
+	display: inline-block;
+	border-radius: 4px;
+}
+.submit{
+	width:300px;
+	margin-left:260px;
+}
+.submit button{
+	width:100%;
+	color:#fff;
+	border-radius: 4px;;
+}

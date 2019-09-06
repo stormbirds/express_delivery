@@ -28,12 +28,6 @@ public interface IExpressTrackingService extends IService<ExpressTracking> {
     boolean subLogisticsTracking(ExpressTracking subBean);
 
     /**
-     * 批量订阅 异步方法
-     * @param expressTrackingList
-     */
-    void subLogisticsTracking(List<ExpressTracking> expressTrackingList);
-
-    /**
      * 即时查询
      * @return
      */

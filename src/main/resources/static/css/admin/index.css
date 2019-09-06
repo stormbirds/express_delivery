@@ -1,0 +1,16 @@
+.home-admin {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.admin-table {
+    width: 1000px;
+}
+
+.admin-table tr, .admin-table th {
+    text-align: center;
+}
+
+.admin-table button {
+    border-radius: 4px;
+}

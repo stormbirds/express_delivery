@@ -1,0 +1,44 @@
+body{
+    width:1500px;
+}
+.home-admin{
+    padding:10px;
+}
+.rowgroup .rowheader{
+    font-size: 28px;
+    line-height: 1.25;
+    letter-spacing: .004em;
+    margin-bottom: 10px;
+    margin-top:22px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #ccc;
+}
+.rowgroup .row{
+    overflow: hidden;
+    margin-top: 20px;
+
+}
+.rowgroup .rowcolumn strong{
+    display: block;
+    line-height: 1.5;
+}
+.rowgroup{
+    position: relative;
+}
+.rowgroup img{
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    right: 40px;
+    top:90px;
+}
+.rowgroup .rowcolumn {
+    float:left;
+    width:21%;
+    margin-left:3%;
+}
+.rowgroup .rowcolumn p{
+    font-size:17px;
+    line-height: 1.5;
+    margin-top: 5px;
+}

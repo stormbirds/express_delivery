@@ -26,7 +26,7 @@ public class SwaggerConfig {
 
     @Bean
     public Docket createRestApi() {
-        String auth = "Bearer eyJhbGciOiJIUzI1NiIsInppcCI6IkRFRiJ9.eNpky0EKwjAQQNG7zDqBJM2kk-xEBBdioRcoTTJC3LSYFgTx7ka3bv_nvaDuEQIYpQw67KzFzhMaAgF75cdUMoS_KaCmZeXmxuFymg7X43kYm-DnCkGj61A7MlpAmbdvwN46-oX7VprSMTJH1NKbWUmbvZVEyDIZzKq_paTYw_sDAAD__w.YfAWkAN6mgFcSeh9zjF_WmtU-6TdI42j5Q7n7zUwhBA";
+        String auth = "eyJhbGciOiJIUzI1NiIsInppcCI6IkRFRiJ9.eNpky0EKwjAQQNG7zDqBJM2kk-xEBBdioRcoTTJC3LSYFgTx7ka3bv_nvaDuEQIYpQw67KzFzhMaAgF75cdUMoS_KaCmZeXmxuFymg7X43kYm-DnCkGj61A7MlpAmbdvwN46-oX7VprSMTJH1NKbWUmbvZVEyDIZzKq_paTYw_sDAAD__w.YfAWkAN6mgFcSeh9zjF_WmtU-6TdI42j5Q7n7zUwhBA";
 
         ParameterBuilder tokenPar = new ParameterBuilder();
         List<Parameter> pars = new ArrayList<>();

@@ -40,7 +40,12 @@ public class LogisticsTrackingServiceImpl implements LogisticsTrackingService {
     private ILogisticCodeRecordService logisticCodeRecordService;
     @Autowired
     private ILogisticCodeTracesService logisticCodeTracesService;
-
+    @Autowired
+    private SendMailService mailService;
+    @Autowired
+    private IExpressTrackingService expressTrackingService;
+    @Autowired
+    private IUserService userService;
 
     /**
      * 订阅消息处理
@@ -49,7 +54,6 @@ public class LogisticsTrackingServiceImpl implements LogisticsTrackingService {
      * @param requestType
      * @param dataSign
      */
-    @Async("asyncPoolTaskExecutor")
     @Override
     public void logisticsTrackinghandle(String requestData, String requestType, String dataSign) {
         if ("101".equals(requestType)) {
@@ -59,6 +63,21 @@ public class LogisticsTrackingServiceImpl implements LogisticsTrackingService {
                     //TODO 这里push消息给管理员，提醒快递状态改变
                     if (dataBean.getReason() != null && !dataBean.getReason().isEmpty()) {
                         //TODO 这里说明该快递有问题，需要push消息给管理员
+                        log.info("物流订单状态异常报告 快递公司 {} 快递单号 {}", dataBean.getShipperCode(), dataBean.getLogisticCode());
+                        ExpressTracking expressTracking = expressTrackingService.getOne(Wrappers.<ExpressTracking>lambdaQuery()
+                        .eq(ExpressTracking::getShipperCode,dataBean.getShipperCode())
+                        .eq(ExpressTracking::getTrackingNo,dataBean.getLogisticCode()));
+                        if(expressTracking!=null){
+                            User user = userService.getById(expressTracking.getPlatformId());
+                            mailService.sendMail(MailVo.builder()
+                                    .to(user.getEmail())
+                                    .subject(String.format("快递单号 %s (平台订单号 %s )返回状态不正常",expressTracking.getTrackingNo(),expressTracking.getPlatformOrderId()) )
+                                    .text(String.format("你有快递单号运输状态不正常，请检查。失败原因 %s 。详细数据 %s。",dataBean.getReason(),dataBean.toString()))
+                                    .build());
+                        }else{
+                            log.info("未找到 {} 该快递的入库记录",dataBean.toString());
+                        }
+
                     }
                     final Long logisticId;
                     LogisticCodeRecord logisticCodeRecordTmp = logisticCodeRecordService.getOne(Wrappers.<LogisticCodeRecord>lambdaQuery()

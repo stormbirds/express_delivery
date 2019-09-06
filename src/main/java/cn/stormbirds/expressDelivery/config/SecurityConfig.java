@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.DefaultHttpFirewall;
+import org.springframework.security.web.firewall.HttpFirewall;
 
 @Configuration
 @EnableWebSecurity
@@ -58,8 +60,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //登录接口放行
                 .antMatchers("/api/v1/login",
                         "/api/v1/sign",
-                        "/app/v1/**","/auth/login","/auth/register",
-                        "/error/**").permitAll()
+                        "/app/v1/**",
+                        "/auth/login",
+                        "/auth/register",
+                        "/login.html",
+                        "/error/**","/**").permitAll()
                 //其他接口全部接受验证
                 .anyRequest().authenticated();
 
@@ -67,6 +72,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
         http.headers().cacheControl();
     }
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http.formLogin()                    //  定义当需要用户登录时候，转到的登录页面。
+//                .loginPage("/login.html")           // 设置登录页面
+//                .loginProcessingUrl("/auth/login")  // 自定义的登录接口
+//                .and()
+//                .authorizeRequests()        // 定义哪些URL需要被保护、哪些不需要被保护
+//                .antMatchers( HttpMethod.OPTIONS, "/**").permitAll()
+//                .antMatchers("/api/v1/login",
+//                        "/api/v1/sign",
+//                        "/app/v1/**",
+//                        "/auth/login",
+//                        "/auth/register",
+//                        "/login",
+//                        "/login.html",
+//                        "/error/**").permitAll()     // 设置所有人都可以访问登录页面
+//                .anyRequest()               // 任何请求,登录后可以访问
+//                .authenticated()
+//                .and()
+//                .csrf().disable();          // 关闭csrf防护
+//    }
 
     @Override
     public void configure(WebSecurity web) {
@@ -75,11 +101,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "swagger-ui.html",
                         "**/swagger-ui.html",
+                        "login.html",
                         "/favicon.ico",
                         "/**/*.css",
                         "/**/*.js",
                         "/**/*.png",
                         "/**/*.gif",
+                        "/**/*.jpg",
                         "/swagger-resources/**",
                         "/v2/**",
                         "/**/*.ttf",
@@ -91,13 +119,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-resources/configuration/ui",
                 "/swagger-resources",
                 "/swagger-resources/configuration/security",
-                "/swagger-ui.html"
+                "/swagger-ui.html",
+                "/app/v1/**",
+                "/auth/login",
+                "/auth/register",
+                "/login"
         );
     }
 
     @Bean
     public JwtTokenFilter authenticationTokenFilterBean() throws Exception {
         return new JwtTokenFilter();
+    }
+
+    /**
+     * 允许多请求地址多加斜杠  比如 /msg/list   //msg/list
+     * @return
+     */
+    @Bean
+    public HttpFirewall httpFirewall() {
+        return new DefaultHttpFirewall();
     }
 
     @Bean

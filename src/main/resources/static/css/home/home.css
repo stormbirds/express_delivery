@@ -1,0 +1,138 @@
+.home_logo img {
+    width: 50px;
+    float: left;
+    margin: 10px;
+    height: 40px;
+}
+.layui-layout-admin .layui-side, .layui-side-scroll{
+    width: 150px;
+}
+.layui-body, .layui-layout-admin .layui-footer{
+    left: 150px;
+}
+.home_logo {
+    overflow: hidden;
+    width: 210px!important;
+}
+
+.home_logo p {
+    float: left;
+    color: #fff;
+}
+
+.layui-layout-admin .layui-body {
+    overflow: hidden;
+}
+
+/* 首页样式 */
+.home-admin {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.top-box1 {
+    background-color: #009688;
+}
+
+.top-box2 {
+    background-color: #5FB878;
+}
+
+.top-box3 {
+    background-color: #1E9FFF;
+}
+
+.top-box4 {
+    background-color: #FFB800;
+}
+
+.top-box5 {
+    background-color: #2F4056;
+}
+
+.top-box2 p, .top-box3 p, .top-box4 p {
+    height: 32px;
+    line-height: 32px;;
+}
+
+.box_main {
+    overflow: hidden;
+}
+
+.box_main img, .box_main dev {
+    float: left;
+}
+
+.box_main img {
+    width: 50px;
+    border-radius: 50%;
+    height: 50px;
+    margin-right: 10px;
+}
+
+.box_main div p {
+    height: 24px;
+    line-height: 24px;
+}
+
+.box_ip {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.box_ip p {
+    height: 20px;
+    line-height: 20px;
+}
+
+.home_box {
+    border-radius: 4px;
+    padding: 10px;
+    height: 100%;
+    box-sizing: border-box;
+    color: #fff;
+    display: -webkit-box;
+    -webkit-box-pack: center;
+    -webkit-box-orient: vertical;
+}
+
+.top li {
+    height: 100%;
+}
+
+.top {
+    height: 118px;
+}
+
+.echart_box {
+    margin-top: 10px;
+}
+
+.echart_box p {
+    height: 32px;
+    line-height: 32px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.echart_box img {
+    width: 100%;
+}
+
+.sreach_box {
+    float: right;
+}
+
+.sreach_box .layui-btn {
+    border-radius: 4px;
+}
+.layui-nav-child{
+    left:auto;
+    right: 10px;
+}
+.layui-nav-tree{
+    width:auto;
+}
+.layui-layout-admin .layui-logo{
+    width: 220px!important;
+}
