@@ -17,7 +17,17 @@
     </style>
 </head>
 <body class="layui-layout-body">
+<div class="layui-container">
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
 
+                <li class="layui-nav-item"><a href="">物流记录</a></li>
+                <li class="layui-nav-item"><a href="">导入记录</a></li>
+            </ul>
+        </div>
+    </div>
     <div class="maintable">
 
         <div class="layui-form layui-border-box layui-table-view" lay-filter="LAY-table-1" >
@@ -30,35 +40,21 @@
                                 <div class="" style="width: 100px;" th:text="#{Operation}">操作</div>
                             </th>
                             <th>
-                                <div class="" style="width: 100px;" th:text="#{AppId}">APP编号</div>
+                                <div class="" style="width: 100px;" th:text="#{AppId}">快递单号</div>
                             </th>
                             <th>
-                                <div class="" style="width: 100px;" th:text="#{AppName}">APP名称</div>
+                                <div class="" style="width: 100px;" th:text="#{AppName}">快递公司编码</div>
                             </th>
                             <th>
-                                <div class="" style="width: 100px;" th:text="#{AppVersionCode}">APP版本编号</div>
+                                <div class="" style="width: 100px;" th:text="#{AppVersionCode}">快递状态</div>
                             </th>
                             <th>
-                                <div class="" style="width: 100px;" th:text="#{AppVersionName}">APP版本名称</div>
+                                <div class="" style="width: 100px;" th:text="#{AppVersionName}">快递订阅状态</div>
                             </th>
                             <th>
-                                <div class="" style="width: 100px;" th:text="#{AppUrl}">APP下载链接</div>
+                                <div class="" style="width: 100px;" th:text="#{AppUrl}">预计送达时间</div>
                             </th>
-                            <th>
-                                <div class="" style="width: 100px;" th:text="#{AppChangeLog}">APP改动日志</div>
-                            </th>
-                            <th>
-                                <div class="" style="width: 100px;" th:text="#{AppUpdateTime}">APP添加时间</div>
-                            </th>
-                            <th>
-                                <div class="" style="width: 100px;" th:text="#{AppForceUpgrade}">是否强制升级</div>
-                            </th>
-                            <th>
-                                <div class="" style="width: 100px;" th:text="#{AppFileSize}">APP大小</div>
-                            </th>
-                            <th>
-                                <div class="" style="width: 100px;" th:text="#{AppOs}">APP平台类型</div>
-                            </th>
+
                         </tr>
                         </thead>
                         <tbody id="list">
@@ -80,6 +76,8 @@
             </div>
         </div>
     </div>
+</div>
+
 <script src="../../layui/layui.js"></script>
 <script src="../../js/jquery-2.0.2.min.js"></script>
 <script src="../../js/main.js"></script>
@@ -87,7 +85,7 @@
 <script src="../../js/jquery.page.js"></script>
 <script src="../../js/zh.js"></script>
 
-
+<script src="../../js/trackingrecord.js"></script>
 
 <script>
     //JavaScript代码区域
@@ -109,6 +107,7 @@
         });
 
         $("#pageNum").val(1);
+        query(1,20,-1,null,null);
 
     });
 
