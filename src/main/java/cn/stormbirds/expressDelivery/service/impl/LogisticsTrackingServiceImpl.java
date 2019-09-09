@@ -45,7 +45,7 @@ public class LogisticsTrackingServiceImpl implements LogisticsTrackingService {
     @Autowired
     private IExpressTrackingService expressTrackingService;
     @Autowired
-    private IUserService userService;
+    private ISysUserService userService;
 
     /**
      * 订阅消息处理
@@ -68,7 +68,7 @@ public class LogisticsTrackingServiceImpl implements LogisticsTrackingService {
                         .eq(ExpressTracking::getShipperCode,dataBean.getShipperCode())
                         .eq(ExpressTracking::getTrackingNo,dataBean.getLogisticCode()));
                         if(expressTracking!=null){
-                            User user = userService.getById(expressTracking.getPlatformId());
+                            SysUser user = userService.getById(expressTracking.getPlatformId());
                             mailService.sendMail(MailVo.builder()
                                     .to(user.getEmail())
                                     .subject(String.format("快递单号 %s (平台订单号 %s )返回状态不正常",expressTracking.getTrackingNo(),expressTracking.getPlatformOrderId()) )

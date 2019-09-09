@@ -4,37 +4,37 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title></title>
-  <link rel="stylesheet" href="layui/css/layui.css">
-  <link rel="stylesheet" href="css/home/home.css">
+  <link rel="stylesheet" href="../../layui/css/layui.css">
+  <link rel="stylesheet" href="../../css/home/home.css">
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
   <div class="layui-header">
     <div class="layui-logo home_logo">
-      <img src=""/>
+      <img src="shoplogo/8888.jpg"/>
       <p></p>
     </div>
     <!-- 头部区域（可配合layui已有的水平导航） -->
     <ul class="layui-nav layui-layout-left">
-      <li class="layui-nav-item layui-this"><a href="index.index" th:text="#{HomePage}"></a></li>
+      <li class="layui-nav-item layui-this"><a href="index.html" th:text="首页"></a></li>
       <!--<li class="layui-nav-item"><a href="data.index" th:text="#{dataStatistics}"></a></li>-->
-      <li class="layui-nav-item"  shiro:hasPermission="findUser"><a href="user.index" th:text="#{UserManagement}"></a></li>
-      <li class="layui-nav-item"  shiro:hasPermission="findOrder"><a href="order.index" th:text="#{OrderManagement}"></a></li>
-      <li class="layui-nav-item"  shiro:hasPermission="findEquipment"><a href="devicemanage.index" th:text="#{DeviceManagement}"></a></li>
+      <li class="layui-nav-item"  ><a href="index.html" th:text="快递单查询"></a></li>
+      <li class="layui-nav-item"  ><a href="index.html" th:text="快递单查询"></a></li>
+      <li class="layui-nav-item"  ><a href="index.html" th:text="快递单查询"></a></li>
       <!--<li class="layui-nav-item"><a href="device.index" th:text="#{equipmentStorage}"></a></li>-->
-      <li class="layui-nav-item "  shiro:hasPermission="findShop"><a href="shop.index" th:text="#{StoreManagement}"></a></li>
-      <li class="layui-nav-item"  shiro:hasPermission="findAgent"><a href="agent.index" th:text="#{AgentManagement}"></a></li>
-      <li class="layui-nav-item"  shiro:hasPermission="statisticalModule"><a href="stat.index" th:text="#{StatisticalReport}"></a></li>
-      <li class="layui-nav-item"  shiro:hasPermission="appVersionEdit"><a href="appversion.index" th:text="#{AppVersionManage}"></a></li>
-      <li class="layui-nav-item"  shiro:hasPermission="appArticleEdit"><a href="apparticle.index" th:text="#{AppArticleManagement}"></a></li>
+      <li class="layui-nav-item " ><a href="index.html" th:text="快递单查询"></a></li>
+      <li class="layui-nav-item"  ><a href="index.html" th:text="快递单查询"></a></li>
+      <li class="layui-nav-item" ><a href="index.html" th:text="快递单查询"></a></li>
+      <li class="layui-nav-item"  ><a href="index.html" th:text="快递单查询"></a></li>
+      <li class="layui-nav-item"  ><a href="index.html" th:text="快递单查询"></a></li>
       <li class="layui-nav-item">
         <a href="javascript:;" th:text="#{More}"></a>
         <dl class="layui-nav-child">
-          <dd><a shiro:hasPermission="financeModele" href="finance.index" th:text="#{AccountChecking}"></a></dd>
-          <dd><a shiro:hasPermission="findManagerCenter" href="admin.index" th:text="#{Administration}"></a></dd>
-          <dd><a href="video.index" th:text="#{MultimediaManagement}"></a></dd>
-          <dd><a href="" th:text="#{RemoteSystemUpgrade}"></a></dd>
-          <dd><a href="" th:text="#{CustomerServiceAgent}"></a></dd>
+          <dd><a href="finance.index" th:text="首页"></a></dd>
+          <dd><a href="admin.index" th:text="快递单查询"></a></dd>
+          <dd><a href="video.index" th:text="导入快递单"></a></dd>
+          <dd><a href="" th:text="其他1"></a></dd>
+          <dd><a href="" th:text="其他2"></a></dd>
         </dl>
       </li>
     </ul>
@@ -60,22 +60,9 @@
     </ul>
   </div>
   
-  <!--<div class="layui-side layui-bg-black">
-    <div class="layui-side-scroll">
-      &lt;!&ndash; 左侧导航区域（可配合layui已有的垂直导航） &ndash;&gt;
-      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
-        <li class="layui-nav-item"><a href="views/data/dataindex.html" target="main">首页</a></li>
-&lt;!&ndash;        <li class="layui-nav-item"><a href="view/home/usercenter.html" target="main">个人中心</a></li>
-        <li class="layui-nav-item"><a>使用说明</a></li>
-        <li class="layui-nav-item"><a>通告发布</a></li>
-        <li class="layui-nav-item"><a>退出登录</a></li>&ndash;&gt;
-      </ul>
-    </div>
-  </div>-->
-  
   <div class="layui-body" style="left: 0;bottom:0">
     <!-- 内容主体区域 -->
-		<iframe id="main" name="main" src="views/data/dataindex.html" width="100%" height="100%" frameborder=0></iframe>
+		<iframe id="main" name="main" src="trackingrecord.html" width="100%" height="100%" frameborder=0></iframe>
   </div>
 </div>
 <script src="layui/layui.js"></script>

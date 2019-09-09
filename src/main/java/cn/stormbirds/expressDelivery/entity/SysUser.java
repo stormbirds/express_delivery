@@ -1,12 +1,13 @@
 package cn.stormbirds.expressDelivery.entity;
 
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -14,17 +15,17 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author stormbirds
- * @since 2019-09-04
+ * @since 2019-09-09
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@ApiModel(value="User对象", description="")
-public class User implements Serializable {
+@ApiModel(value="SysUser对象", description="")
+public class SysUser implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5558956449067812418L;
 
-    @ApiModelProperty(value = "id")
+    @ApiModelProperty(value = "主键")
     private Long id;
 
     @ApiModelProperty(value = "用户名")
@@ -62,4 +63,6 @@ public class User implements Serializable {
 
     @ApiModelProperty(value = "用户邮件地址，默认用来接收快递单报警信息")
     private String email;
+
+
 }

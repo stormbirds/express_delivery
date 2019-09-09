@@ -1,6 +1,6 @@
 package cn.stormbirds.expressDelivery.service;
 
-import cn.stormbirds.expressDelivery.entity.User;
+import cn.stormbirds.expressDelivery.entity.SysUserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * </p>
  *
  * @author stormbirds
- * @since 2019-09-04
+ * @since 2019-09-09
  */
-public interface IUserService extends IService<User> {
+public interface ISysUserRoleService extends IService<SysUserRole> {
 
 }

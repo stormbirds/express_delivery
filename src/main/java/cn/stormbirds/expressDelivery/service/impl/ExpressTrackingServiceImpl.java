@@ -64,7 +64,7 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
     @Autowired
     private SendMailService mailService;
     @Autowired
-    private IUserService userService;
+    private ISysUserService userService;
 
     @Autowired
     public ExpressTrackingServiceImpl(GetIdService idService) {
@@ -124,7 +124,7 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
             log.info("该订单已订阅 {}",subBean.toString());
             return false;
         }
-        User user = userService.getById(subBean.getPlatformId());
+        SysUser user = userService.getById(subBean.getPlatformId());
         String requestData = JSON.toJSONString(new LogisticsTrackingSubBean(subBean,"管理员","17792294757","17792294757","陕西省","西安市","碑林区","十字路口") );
 
         JSONObject result = kdniaoPost(requestData,LOGISTICS_TRACKING_SUB,null);

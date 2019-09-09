@@ -26,20 +26,9 @@ public class SwaggerConfig {
 
     @Bean
     public Docket createRestApi() {
-        String auth = "eyJhbGciOiJIUzI1NiIsInppcCI6IkRFRiJ9.eNpky0EKwjAQQNG7zDqBJM2kk-xEBBdioRcoTTJC3LSYFgTx7ka3bv_nvaDuEQIYpQw67KzFzhMaAgF75cdUMoS_KaCmZeXmxuFymg7X43kYm-DnCkGj61A7MlpAmbdvwN46-oX7VprSMTJH1NKbWUmbvZVEyDIZzKq_paTYw_sDAAD__w.YfAWkAN6mgFcSeh9zjF_WmtU-6TdI42j5Q7n7zUwhBA";
-
-        ParameterBuilder tokenPar = new ParameterBuilder();
-        List<Parameter> pars = new ArrayList<>();
-        tokenPar.name("Authorization").defaultValue(auth)
-                .description("令牌")
-                .modelRef(new ModelRef("string"))
-                .parameterType("header")
-                .required(false).build();
-
-        pars.add(tokenPar.build());
 
         return new Docket(DocumentationType.SWAGGER_2)
-                .globalOperationParameters(pars)
+//                .globalOperationParameters(pars)
                 .select()
                 .apis(RequestHandlerSelectors.any())
                 .paths(Predicates.not(PathSelectors.regex("/error.*")))
