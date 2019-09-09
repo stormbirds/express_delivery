@@ -9,60 +9,11 @@
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
-  <div class="layui-header">
-    <div class="layui-logo home_logo">
-      <img src="shoplogo/8888.jpg"/>
-      <p></p>
-    </div>
-    <!-- 头部区域（可配合layui已有的水平导航） -->
-    <ul class="layui-nav layui-layout-left">
-      <li class="layui-nav-item layui-this"><a href="index.html" th:text="首页"></a></li>
-      <!--<li class="layui-nav-item"><a href="data.index" th:text="#{dataStatistics}"></a></li>-->
-      <li class="layui-nav-item"  ><a href="index.html" th:text="快递单查询"></a></li>
-      <li class="layui-nav-item"  ><a href="index.html" th:text="快递单查询"></a></li>
-      <li class="layui-nav-item"  ><a href="index.html" th:text="快递单查询"></a></li>
-      <!--<li class="layui-nav-item"><a href="device.index" th:text="#{equipmentStorage}"></a></li>-->
-      <li class="layui-nav-item " ><a href="index.html" th:text="快递单查询"></a></li>
-      <li class="layui-nav-item"  ><a href="index.html" th:text="快递单查询"></a></li>
-      <li class="layui-nav-item" ><a href="index.html" th:text="快递单查询"></a></li>
-      <li class="layui-nav-item"  ><a href="index.html" th:text="快递单查询"></a></li>
-      <li class="layui-nav-item"  ><a href="index.html" th:text="快递单查询"></a></li>
-      <li class="layui-nav-item">
-        <a href="javascript:;" th:text="#{More}"></a>
-        <dl class="layui-nav-child">
-          <dd><a href="finance.index" th:text="首页"></a></dd>
-          <dd><a href="admin.index" th:text="快递单查询"></a></dd>
-          <dd><a href="video.index" th:text="导入快递单"></a></dd>
-          <dd><a href="" th:text="其他1"></a></dd>
-          <dd><a href="" th:text="其他2"></a></dd>
-        </dl>
-      </li>
-    </ul>
-    <ul class="layui-nav layui-layout-right">
-      <li class="layui-nav-item">
-        <a href="javascript:;">
-          切换语言
-        </a>
-        <dl class="layui-nav-child changLang">
-          <dd><a data="zh">中文</a></dd>
-          <dd><a data="en">English</a></dd>
-        </dl>
-      </li>
-      <li class="layui-nav-item layui-this">
-        <a href="javascript:;">个人中心</a>
-        <dl class="layui-nav-child">
-          <dd><a>姓名：<span id="truename"></span></a></dd>
-          <dd><a>部门：<span id="part"></span></a></dd>
-          <dd><a id="change">修改密码</a></dd>
-          <dd><a id="logout" href="/logout">退出登录</a></dd>
-        </dl>
-      </li>
-    </ul>
-  </div>
-  
+  <script type="text/javascript" src="js/nav.js"></script>
+
   <div class="layui-body" style="left: 0;bottom:0">
     <!-- 内容主体区域 -->
-		<iframe id="main" name="main" src="trackingrecord.html" width="100%" height="100%" frameborder=0></iframe>
+		<iframe id="main" name="main" src="" width="100%" height="100%" frameborder=0></iframe>
   </div>
 </div>
 <script src="layui/layui.js"></script>

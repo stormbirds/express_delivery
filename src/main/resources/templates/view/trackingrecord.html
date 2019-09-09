@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/order/index.css"/>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/jquery.page.css"/>
+    <style>
+        .layui-form-item .layui-inline{
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+
+    <div class="maintable">
+
+        <div class="layui-form layui-border-box layui-table-view" lay-filter="LAY-table-1" >
+            <div class="layui-table-box">
+                <div class="layui-table-body layui-table-main" style="height:auto;padding-bottom:10px;">
+                    <table cellspacing="0" cellpadding="0" border="0" class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{Operation}">操作</div>
+                            </th>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{AppId}">APP编号</div>
+                            </th>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{AppName}">APP名称</div>
+                            </th>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{AppVersionCode}">APP版本编号</div>
+                            </th>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{AppVersionName}">APP版本名称</div>
+                            </th>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{AppUrl}">APP下载链接</div>
+                            </th>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{AppChangeLog}">APP改动日志</div>
+                            </th>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{AppUpdateTime}">APP添加时间</div>
+                            </th>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{AppForceUpgrade}">是否强制升级</div>
+                            </th>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{AppFileSize}">APP大小</div>
+                            </th>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{AppOs}">APP平台类型</div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody id="list">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <p id="nullTip" style="text-align: center;height: 32px;line-height: 32px;padding-bottom: 10px"></p>
+        <div class="pageBox">
+            <div id="page" class="layui-inline"></div>
+            <div class="layui-inline">
+                <span style="margin-right: 10px;">跳转到第</span>
+                <form class="layui-inline" id="pageform">
+                    <input id="pageValue" type="number" name="pageNum" class="layui-inline" style="width: 40px;padding:2px;" min="1"/>
+                </form>
+                <span>页</span>
+                <button class="layui-btn layui-btn-xs" id="goPage">跳转</button>
+            </div>
+        </div>
+    </div>
+<script src="../../layui/layui.js"></script>
+<script src="../../js/jquery-2.0.2.min.js"></script>
+<script src="../../js/main.js"></script>
+<script src="../../js/jquery.cookie.js"></script>
+<script src="../../js/jquery.page.js"></script>
+<script src="../../js/zh.js"></script>
+
+
+
+<script>
+    //JavaScript代码区域
+    layui.config({
+        base: '../../js/modules/' //你存放新模块的目录，注意，不是layui的模块目录
+    }).use('address'); //加载入口
+    layui.use(['element','form', 'laydate', 'layer', 'address'], function() {
+        var element = layui.element
+            , form = layui.form
+            , laydate = layui.laydate
+            , layer = layui.layer
+            , $ = layui.jquery
+            , picker = layui.picker
+            , address = layui.address();
+        laydate.render({
+            elem: '#test1'
+            , type: 'datetime'
+            , range: true
+        });
+
+        $("#pageNum").val(1);
+
+    });
+
+
+
+</script>
+</div>
+</body>
+</html>
