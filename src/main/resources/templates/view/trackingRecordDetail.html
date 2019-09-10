@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/order/index.css"/>
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/jquery.page.css"/>
+    <style>
+        .layui-form-item .layui-inline{
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-container">
+
+    <table id="demo" lay-filter="test"></table>
+
+</div>
+
+<script src="../../layui/layui.js"></script>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        var logisticId = GetQueryString('logisticId')
+        console.log("获取到参数 ",logisticId)
+        //第一个实例
+        table.render({
+            elem: '#demo'
+            ,height: 312
+            ,url: '/app/v1/queryTrackingTraces' //数据接口
+            ,method: 'post'
+            ,page: false //开启分页
+            ,contentType: 'application/x-www-form-urlencoded'
+            ,where: {logisticId: logisticId}
+            ,parseData: function(res){ //res 即为原始返回的数据
+                return {
+                    "code": res.code, //解析接口状态
+                    "msg": res.msg, //解析提示文本
+                    "count": res.data.length, //解析数据长度
+                    "data": res.data //解析数据列表
+                };
+            }
+            ,cols: [[ //表头
+                {field: 'logisticId', title: '快递单号', width:80, sort: true, fixed: 'left'}
+                ,{field: 'acceptStation', title: '快递状态', width:80}
+                ,{field: 'acceptTime', title: '发生时间', width:80, sort: true}
+                ,{field: 'remark', title: '备注', width:80}
+            ]]
+        });
+
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+
+    });
+</script>
+</body>
+</html>

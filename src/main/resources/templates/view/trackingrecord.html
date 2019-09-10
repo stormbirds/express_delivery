@@ -18,16 +18,75 @@
 </head>
 <body class="layui-layout-body">
 <div class="layui-container">
-    <div class="layui-side layui-bg-black">
-        <div class="layui-side-scroll">
-            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree"  lay-filter="test">
 
-                <li class="layui-nav-item"><a href="">物流记录</a></li>
-                <li class="layui-nav-item"><a href="">导入记录</a></li>
-            </ul>
+    <div class="order-top">
+        <div class="top-main">
+            <form class="layui-form layui-inline" id="agentform">
+                <div class="layui-form-item layui-inline">
+                    <div class="layui-inline">
+                        <label class="layui-form-label" th:text="快递单号">快递单号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="logisticCode" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label" th:text="快递公司">快递公司</label>
+                        <div class="layui-input-inline">
+                            <select name="shipperCode">
+                                <option value="0"  selected="selected" th:text="所有">所有</option>
+                                <option value="YTO" th:text="圆通">圆通</option>
+                                <option value="ZTO" th:text="中通">中通</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" th:text="物流状态">物流状态</label>
+                        <div class="layui-input-inline areaInput">
+                            <select name="state" >
+                                <option value="-1">全部</option>
+                                <option value="0">无轨迹</option>
+                                <option value="1">已揽收</option>
+                                <option value="2">在途中</option>
+                                <option value="3">签收</option>
+                                <option value="4">问题件</option>
+                            </select>
+                            <!--<input type="hidden" name="pname" id="getProvince"/>-->
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" th:text="快递订阅状态">快递订阅状态：</label>
+                        <div class="layui-input-inline">
+                            <select name="success" >
+                                <option value="-1">全部</option>
+                                <option value="0">订阅成功</option>
+                                <option value="1">订阅失败</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label" th:text="">预计送达时间：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" class="layui-input chosedate" name="estimatedDeliveryTime" id="test1">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn-lg layui-btn" id="getAgentData"   lay-submit lay-filter="*" th:text="#{Inquire}">查询</button>
+                </div>
+            </form>
         </div>
+        <button id="show" class="powerBtn"><i class="layui-icon layui-icon-prev"></i></button>
+        <button id="hide" class="powerBtn"><i class="layui-icon layui-icon-next"></i></button>
     </div>
+    <div class="datatop layui-form">
+        <p class="layui-inline"><span th:text="#{Accordingto}">根据上面设定条件，总共有</span><span id="total">5000</span><span th:text="#{Datamatches}">条数据符合查询记录</span></p>
+        <a id="out" class="layui-btn layui-btn-sm layui-btn-normal" shiro:hasPermission="agentCenterExport" th:text="#{Export}">导出</a>
+    </div>
+
+
+
     <div class="maintable">
 
         <div class="layui-form layui-border-box layui-table-view" lay-filter="LAY-table-1" >
@@ -80,11 +139,8 @@
 
 <script src="../../layui/layui.js"></script>
 <script src="../../js/jquery-2.0.2.min.js"></script>
-<script src="../../js/main.js"></script>
 <script src="../../js/jquery.cookie.js"></script>
 <script src="../../js/jquery.page.js"></script>
-<script src="../../js/zh.js"></script>
-
 <script src="../../js/trackingrecord.js"></script>
 
 <script>

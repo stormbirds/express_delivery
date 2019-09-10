@@ -1,5 +1,7 @@
 package cn.stormbirds.expressDelivery.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.baomidou.mybatisplus.annotation.IdType;
 import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -30,6 +32,7 @@ public class LogisticCodeRecord implements Serializable {
 
     private static final long serialVersionUID = -4441415820057099885L;
     @ApiModelProperty(value = "id")
+    @JSONField(serializeUsing= ToStringSerializer.class)
     private Long id;
 
     @ApiModelProperty(value = "快递单号")

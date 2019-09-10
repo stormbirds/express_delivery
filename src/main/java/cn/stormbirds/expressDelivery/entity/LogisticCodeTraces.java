@@ -1,15 +1,16 @@
 package cn.stormbirds.expressDelivery.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import java.time.LocalDateTime;
-import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -24,11 +25,15 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="LogisticCodeTraces对象", description="")
-public class LogisticCodeTraces implements Serializable {
+public class LogisticCodeTraces implements Serializable{
 
     private static final long serialVersionUID = -4729075392155520666L;
+
+
     @ApiModelProperty(value = "id")
+    @JSONField(serializeUsing= ToStringSerializer.class)
     private Long id;
+
     @ApiModelProperty(value = "快递记录id")
     private Long logisticId;
 
@@ -42,4 +47,18 @@ public class LogisticCodeTraces implements Serializable {
     private String remark;
 
 
+    public String getId() {
+        return id.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "LogisticCodeTraces{" +
+                "id='" + id + '\'' +
+                ", logisticId=" + logisticId +
+                ", acceptStation='" + acceptStation + '\'' +
+                ", acceptTime=" + acceptTime +
+                ", remark='" + remark + '\'' +
+                '}';
+    }
 }

@@ -27,10 +27,11 @@ public class RestTemplateConfig {
     @Autowired
     private ObjectMapper objectMapper;
 
-    /**
+/**
      * 使用RestTemplateBuilder来实例化RestTemplate对象，spring默认已经注入了RestTemplateBuilder实例
-     * @return
-     */
+     * @return*/
+
+
     @Bean
     public RestTemplate restTemplate() {
 

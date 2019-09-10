@@ -1,21 +1,24 @@
-function query(pageNum,pageSize,state,lgisticCode,shipperCode) {
+// function queryExpressTracking(pageNum, pageSize, platformId, platformOrderId, itemTitle, receiverName,
+//                               receiverPhone, receiverProvince, receiverCity, receiverArea, receiverAddress,
+//                               itemNum, trackingNo, shipperCode, trackingStatus,logisticStatus) {
+function queryExpressTracking(data) {
     var view = "";
     $.ajax({
         type: "POST",
-        url: "/app/v1/queryTrackingRecord",
-        data: {pageNum:pageNum,pageSize:pageSize,state:state,lgisticCode:lgisticCode,shipperCode:shipperCode},
+        url: "/app/v1/queryExpressTrackingRecord",
+        data: data,
         xhrFields: {
             withCredentials: true
         },
         crossDomain: true,
         success: function(backData) {
-            console.log(backData.data);
+            console.log(backData);
             $("#total").html(backData.data.total);
             var list = backData.data.records;
             for (var i = 0; i< list.length; i++){
                 view += '<tr>';
                 view += '<td>';
-                view += '<a class="layui-btn-sm detail'+i+'" onmouseenter="show(\'详情\',\'.detail'+i+'\')" onmouseleave="hide()" onclick="trackingRecordDetail(\''+ list[i].id.toString() +'\')"><i class="layui-icon-log layui-icon"></i></a>';
+                view += '<a class="layui-btn-sm detail'+i+'" onmouseenter="show(\'详情\',\'.detail'+i+'\')" onmouseleave="hide()" onclick="appVersionDetail(\'\')"><i class="layui-icon-log layui-icon"></i></a>';
                 view += '<a class="layui-btn-sm edit'+i+'" onmouseenter="show(\'编辑\', \'.edit'+i+'\')" onmouseleave="hide()"' +
                     'onclick="editAppVersion(\''+list[i].appId+'\',\''+list[i].appName+'\',\''+list[i].versionCode+'\',' +
                     '\''+list[i].versionName+'\',\''+list[i].appUrl+'\',\''+list[i].changeLog+'\',\''+list[i].updatedAt+'\',\''+list[i].forceUpgrade+'\',\''+list[i].fileSize+'\',\''+list[i].appOs+'\')"><i class="layui-icon-set-fill layui-icon"></i></a>';
@@ -23,11 +26,19 @@ function query(pageNum,pageSize,state,lgisticCode,shipperCode) {
 
                 view += '</td>';
 
-                view += '<td>'+(list[i].logisticCode==undefined? "" :list[i].logisticCode)+'</td>'/*快递单号*/
-                view += '<td>'+(list[i].shipperCode==undefined ? "" :list[i].shipperCode)+'</td>'/*快递公司编码*/
-                view += '<td>'+(list[i].state==undefined ? "" :list[i].state)+'</td>';/*快递状态*/
-                view += '<td>'+list[i].success+'</td>';/*快递订阅状态*/
-                view += '<td>'+(list[i].estimatedDeliveryTime==undefined? "":list[i].estimatedDeliveryTime)+'</td>';/*预计送达时间*/
+                view += '<td>'+(list[i].platformOrderId==undefined? "" :list[i].platformOrderId)+'</td>'/*发货单号*/
+                view += '<td>'+(list[i].itemTitle==undefined ? "" :list[i].itemTitle)+'</td>'/*物品名称*/
+                view += '<td>'+(list[i].receiverName==undefined ? "" :list[i].receiverName)+'</td>';/*收货人姓名*/
+                view += '<td>'+list[i].receiverPhone+'</td>';/*收货人电话*/
+                view += '<td>'+(list[i].receiverProvince==undefined? "":list[i].receiverProvince)+'</td>';/*收货人省份*/
+                view += '<td>'+(list[i].receiverCity==undefined ? "" :list[i].receiverCity)+'</td>';/*收货人城市*/
+                view += '<td>'+(list[i].receiverArea==undefined ? "" :list[i].receiverArea)+'</td>';/*收货人地区*/
+                view += '<td>'+(list[i].receiverAddress==undefined ? "" :list[i].receiverAddress)+'</td>';/*详细收货地址*/
+                view += '<td>'+(list[i].itemNum==undefined ? "" :list[i].itemNum)+'</td>';/*物品个数*/
+                view += '<td>'+(list[i].trackingNo==undefined ? "" :list[i].trackingNo)+'</td>';/*物流编号*/
+                view += '<td>'+(list[i].shipperCode==undefined ? "" :list[i].shipperCode)+'</td>';/*物流公司代码*/
+                view += '<td>'+(list[i].trackingStatus==undefined ? "" :list[i].trackingStatus)+'</td>';/*追踪状态*/
+                view += '<td>'+(list[i].logisticStatus==undefined ? "" :list[i].logisticStatus)+'</td>';/*快递状态*/
             }
             $("#list").html(view);
 
@@ -55,34 +66,13 @@ function query(pageNum,pageSize,state,lgisticCode,shipperCode) {
         }
     });
 }
+
 var tip_index = 0;
 function show(data,className){
     tip_index = layer.tips(data, className, {time: 0, tips: 1});
 }
 function hide(){
     layer.close(tip_index);
-}
-
-function trackingRecordDetail(logisticId){
-    window.location.href = "trackingRecordDetail.html?logisticId="+logisticId ;
-    // $.ajax({
-    //     type: "POST",
-    //     url: '/app/v1/queryTrackingTraces',
-    //     data: {logisticId:logisticId},
-    //     xhrFields: {
-    //         withCredentials: true
-    //     },
-    //     crossDomain: true,
-    //     dataType: "json",
-    //     success: function (backData) {
-    //         var code = backData.code;
-    //         if (code == 1) {
-    //             window.location.href = "trackingRecordDetail.html?list="+backData.data;
-    //         } else {
-    //             layer.msg('暂无权限');
-    //         }
-    //     }
-    // })
 }
 
 /*序列化转json*/

@@ -17,15 +17,118 @@
     </style>
 </head>
 <body class="layui-layout-body">
-<div class="layui-side layui-bg-black">
-    <div class="layui-side-scroll">
-        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-        <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+<div class="layui-container">
 
-            <li class="layui-nav-item layui-this"><a href="">导航1</a></li>
-            <li class="layui-nav-item"><a href="">导航2</a></li>
-        </ul>
+    <div class="order-top">
+        <div class="top-main">
+            <form class="layui-form layui-inline" id="queryform">
+                <div class="layui-form-item layui-inline">
+                    <div class="layui-inline">
+                        <label class="layui-form-label" th:text="快递单号">快递单号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="logisticCode" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-inline">
+                        <label class="layui-form-label" th:text="快递公司">快递公司</label>
+                        <div class="layui-input-inline">
+                            <select name="shipperCode">
+                                <option value="YTO" selected="selected"  th:text="圆通">圆通</option>
+                                <option value="ZTO" th:text="中通">中通</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--<div class="layui-inline">-->
+                        <!--<label class="layui-form-label" th:text="物流状态">物流状态</label>-->
+                        <!--<div class="layui-input-inline areaInput">-->
+                            <!--<select name="state" >-->
+                                <!--<option value="-1">全部</option>-->
+                                <!--<option value="0">无轨迹</option>-->
+                                <!--<option value="1">已揽收</option>-->
+                                <!--<option value="2">在途中</option>-->
+                                <!--<option value="3">签收</option>-->
+                                <!--<option value="4">问题件</option>-->
+                            <!--</select>-->
+                            <!--&lt;!&ndash;<input type="hidden" name="pname" id="getProvince"/>&ndash;&gt;-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn-lg layui-btn" id="query"   lay-submit lay-filter="*" th:text="#{Inquire}">查询</button>
+                </div>
+            </form>
+        </div>
+
     </div>
+
+    <div class="maintable">
+
+        <div class="layui-form layui-border-box layui-table-view" lay-filter="LAY-table-1" >
+            <div class="layui-table-box">
+                <div class="layui-table-body layui-table-main" style="height:auto;padding-bottom:10px;">
+                    <table cellspacing="0" cellpadding="0" border="0" class="layui-table">
+                        <thead>
+                        <tr>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{Operation}">时间</div>
+                            </th>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{AppId}">快递状态</div>
+                            </th>
+                            <th>
+                                <div class="" style="width: 100px;" th:text="#{AppName}">备注</div>
+                            </th>
+
+                        </tr>
+                        </thead>
+                        <tbody id="list">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <p id="nullTip" style="text-align: center;height: 32px;line-height: 32px;padding-bottom: 10px"></p>
+
+    </div>
+</div>
+
+<script src="../../layui/layui.js"></script>
+<script src="../../js/jquery-2.0.2.min.js"></script>
+<script src="../../js/jquery.cookie.js"></script>
+<script src="../../js/jquery.page.js"></script>
+<script src="../../js/trackQuery.js"></script>
+<script>
+    //JavaScript代码区域
+    layui.config({
+        base: '../../js/modules/' //你存放新模块的目录，注意，不是layui的模块目录
+    }).use('address'); //加载入口
+    layui.use(['element','form', 'laydate', 'layer', 'address'], function() {
+        var element = layui.element
+            , form = layui.form
+            , laydate = layui.laydate
+            , layer = layui.layer
+            , $ = layui.jquery
+            , picker = layui.picker
+            , address = layui.address();
+        laydate.render({
+            elem: '#test1'
+            , type: 'datetime'
+            , range: true
+        });
+        form.on('submit(*)', function(data){
+            var data = $("#queryform").serializeObject();
+            queryExpressTracking(data);
+            return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+    });
+
+
+
+</script>
 </div>
 </body>
 </html>

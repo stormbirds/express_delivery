@@ -55,9 +55,6 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
     @Value(value = "${kdniao.AppKey}")
     private String AppKey ;
 
-    @Autowired
-    private RestTemplate restTemplate;
-
     private final GetIdService idService;
     @Autowired
     private LogisticsTrackingService logisticsTrackingService;
@@ -76,7 +73,7 @@ public class ExpressTrackingServiceImpl extends ServiceImpl<ExpressTrackingMappe
         List<LogisticCodeBean> logisticCodeBeans = ExcelUtils.readExcel(LogisticCodeBean.class, file);
         if (logisticCodeBeans.size() > 0) {
             List<ExpressTracking> expressTrackingList = logisticCodeBeans.stream()
-                    .filter(logisticCodeBean -> getOne(Wrappers.<ExpressTracking>lambdaQuery()
+                    .filter(logisticCodeBean -> super.getOne(Wrappers.<ExpressTracking>lambdaQuery()
                             .eq(ExpressTracking::getPlatformId, userId)
                             .eq(ExpressTracking::getPlatformOrderId, logisticCodeBean.getOrderId())) == null)
                     .map(logisticCodeBean -> {

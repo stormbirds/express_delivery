@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title></title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/detail.css">
+    <link rel="stylesheet" href="../../css/globle.css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/jquery.page.css">
+    <link rel="stylesheet" href="../../css/fileinput.css">
+    <style>
+        .layui-form-pane .layui-form-label {
+            width: 120px;
+        }
+
+        .layui-form-pane .layui-form-item[pane] .layui-input-inline {
+            margin-left: 119px;
+        }
+
+        .layui-form-item img {
+            width: 100px;
+            height: 80px;
+            margin-left: 40px;
+        }
+
+        .first, .last, .prv, .next {
+            width: 50px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body class="">
+<div class="layui-layout layui-layout-admin home-admin">
+	<span class="layui-breadcrumb">
+		<a href="" th:text="#{AppArticleManagement}">所有物流订单</a>
+		<a href="" th:text="#{AppArticle}">导入记录</a>
+	</span>
+    <div class="section-content" style="margin-top:20px;">
+        <form class="layui-form layui-form-pane" id="changestore">
+            <div class="layui-form-item">
+                <label class="layui-form-label" id="excelfile" name="excelfile" th:text="">导入excel</label>
+                <!--<div class="layui-input-inline" style="width:500px;">-->
+                    <!--<div class="layui-input-inline" style="width: 310px;">-->
+                        <!--<div class="file-loading">-->
+                            <!--<input id="excelfile" name="excelfile" type="file">-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            </div>
+
+            <div class="layui-form-item">
+                <p class="layui-btn layui-inline" id="add" th:text="">导入</p>
+                <p class="layui-btn layui-inline" onclick="history.go(-1)" th:text="#{return}">返回</p>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<script src="../../layui/layui.js"></script>
+<script src="../../js/jquery-2.0.2.min.js"></script>
+<script src="../../js/jquery.page.js"></script>
+<script src="../../js/fileinput.js"></script>
+
+<script>
+    layui.use('upload', function(){
+        var upload = layui.upload;
+
+        //执行实例
+        var uploadInst = upload.render({
+            auto:false,
+            accept: 'file',
+            exts: 'xlsx|xls',
+            bindAction: '#add',
+            elem: '#excelfile' //绑定元素
+            ,url: '/app/v1/importLogisticsCodeByExcel' //上传接口
+            ,done: function(res){
+                //上传完毕回调
+                console.log("上传成功 ",res)
+            }
+            ,error: function(){
+                //请求异常回调
+                console.log("上传失败")
+            }
+        });
+    });
+    // layui.use(['element','form', 'laydate', 'layer'], function(){
+    //     var element = layui.element
+    //         ,form = layui.form
+    //         ,laydate = layui.laydate
+    //         ,layer = layui.layer
+    //         ,$ = layui.jquery
+    //     $("#excelfile").fileinput({
+    //         uploadUrl: '/appversion/uploadApp',
+    //         uploadAsync: true,
+    //         language:'zh',
+    //         overwriteInitial: false,
+    //         initialPreviewAsData: true,
+    //         maxFileCount:1,
+    //         showUpload: false,
+    //         auto: false,
+    //         bindAction: '#add'
+    //     })
+    //     $("#excelfile").on("filebatchselected", function(event, files) {
+    //         $(this).fileinput("upload");
+    //     })
+    //     $("#excelfile").on("fileuploaded", function(event, data) {
+    //         console.log(data.response);
+    //         $("#file").val(data.response.path);
+    //         $("#appUrl").attr("value",migUrl+data.response.path.substring(1));
+    //         $("#fileSize").attr("value",data.response.size);
+    //     });
+    //     $("#excelfile").on('fileuploaderror', function(event, data, msg) {  //一个文件上传失败
+    //         console.log('文件上传失败！'+msg);
+    //     });
+
+        // $("#add").click(function () {
+        //
+        //     console.log($("#changestore").serializeObject());
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "/appversion/addAppVersion",
+        //         data: $("#changestore").serializeObject(),
+        //         xhrFields: {
+        //             withCredentials: true
+        //         },
+        //         crossDomain: true,
+        //         dataType: "json",
+        //         success: function (backData) {
+        //             layer.msg("保存成功");
+        //             window.location.href = "index"
+        //         },
+        //         error: function () {
+        //             layer.msg("保存出错，请检查字段或者重试");
+        //         }
+        //     })
+        //
+        // })
+    // })
+</script>
+</body>
+</html>
