@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ public class MailVo {
     private String text;
 
     @ApiModelProperty(value = "发送时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime sentDate;
 
     @ApiModelProperty(value = "抄送（多个邮箱则用逗号\",\"隔开）")

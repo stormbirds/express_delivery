@@ -17,8 +17,8 @@ function query(pageNum,pageSize,state,lgisticCode,shipperCode) {
                 view += '<td>';
                 view += '<a class="layui-btn-sm detail'+i+'" onmouseenter="show(\'详情\',\'.detail'+i+'\')" onmouseleave="hide()" onclick="trackingRecordDetail(\''+ list[i].id.toString() +'\')"><i class="layui-icon-log layui-icon"></i></a>';
                 view += '<a class="layui-btn-sm edit'+i+'" onmouseenter="show(\'编辑\', \'.edit'+i+'\')" onmouseleave="hide()"' +
-                    'onclick="editAppVersion(\''+list[i].appId+'\',\''+list[i].appName+'\',\''+list[i].versionCode+'\',' +
-                    '\''+list[i].versionName+'\',\''+list[i].appUrl+'\',\''+list[i].changeLog+'\',\''+list[i].updatedAt+'\',\''+list[i].forceUpgrade+'\',\''+list[i].fileSize+'\',\''+list[i].appOs+'\')"><i class="layui-icon-set-fill layui-icon"></i></a>';
+                    'onclick="getbox(\''+list[i].id+'\',\''+list[i].logisticCode+'\',\''+list[i].shipperCode+'\',' +
+                    '\''+list[i].state+'\',\''+list[i].success+'\',\''+list[i].estimatedDeliveryTime+'\',\''+list[i].reason+'\',\''+list[i].callback+'\',\''+list[i].eBusinessId+'\')"><i class="layui-icon-set-fill layui-icon"></i></a>';
                 view += '<a class="layui-btn-sm del'+i+'" onmouseenter="show(\'删除\',\'.del'+i+'\')" onmouseleave="hide()" onclick="del(\''+list[i].appId+'\')"><i class="layui-icon-close-fill layui-icon"></i></a>';
 
                 view += '</td>';
@@ -83,6 +83,74 @@ function trackingRecordDetail(logisticId){
     //         }
     //     }
     // })
+}
+
+function getbox(id, logisticCode,shipperCode,state,success,estimatedDeliveryTime,reason,callback,eBusinessId) {
+
+    $("#recordId").val(id);
+    $("#logisticCode").val(logisticCode);
+
+    $('[id=state]').val(state)
+    $('[id=success]').val(success=='true'?1:0)
+    $('[id=shipperCode]').val(shipperCode)
+    layui.use('form', function () {
+        var form = layui.form;
+        form.render();
+    });
+
+    $("#estimatedDeliveryTime").val(estimatedDeliveryTime);
+    $("#reason").val(reason);
+    $("#callback").val(callback);
+    $("#eBusinessId").val(eBusinessId);
+    var that = this;
+    //多窗口模式，层叠置顶
+    layer.open({
+        type: 1 //此处以iframe举例
+        , title: '修改物流订阅记录'
+        // , area: ['390px', '260px']
+        , shade: 0
+        , anim: 1
+        , btn: ['取消', '保存']
+        , maxmin: true
+        // , offset: [ //为了演示，随机坐标
+        //     300
+        //     , 390
+        // ]
+        , content: $("#changbox")
+        , btn1: function () {
+            layer.closeAll();
+        }
+        , btn2: function () {
+            var loading = layer.load();
+            var data = $("#changeform").serialize();
+            console.log(data);
+            $.ajax({
+                type: "POST",
+                url: '/app/v1/updateTrackingRecord',
+                data: data,
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (backData) {
+                    if (backData.code != 200) {
+                        layer.msg(backData.msg);
+                    }else {
+
+                        layer.msg(backData.message);
+                    }
+                    var pageNum = $("#pageNum").val()==undefined?1:$("#pageNum").val()
+                    var shipperCodeTmp = $('[id="getShipperCode"]').val() == 0?null:$('[id="getShipperCode"]').val()
+                    query(pageNum,20,$('[id="getState"]').val(),$('[id="getLogisticCode"]').val(),shipperCodeTmp);
+                    layer.close(loading);
+                },
+                error: function () {
+                    layer.msg('请求错误');
+                    layer.close(loading);
+                }
+            })
+        }
+    });
 }
 
 /*序列化转json*/

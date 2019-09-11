@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -35,6 +36,7 @@ public class SysUser implements Serializable {
     private String password;
 
     @ApiModelProperty(value = "注册时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
     @ApiModelProperty(value = "是否启用")
@@ -44,6 +46,7 @@ public class SysUser implements Serializable {
     private Boolean accountNonLocked;
 
     @ApiModelProperty(value = "上次更新密码时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastPasswordResetDate;
 
     @ApiModelProperty(value = "商户手机")

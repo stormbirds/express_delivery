@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title></title>
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" href="../../css/detail.css">
+    <link rel="stylesheet" href="../../css/globle.css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/jquery.page.css">
+    <style>
+        .layui-form-pane .layui-form-label {
+            width: 120px;
+        }
+
+        .layui-form-pane .layui-form-item[pane] .layui-input-inline {
+            margin-left: 119px;
+        }
+
+        .layui-form-item img {
+            width: 100px;
+            height: 80px;
+            margin-left: 40px;
+        }
+
+        .first, .last, .prv, .next {
+            width: 50px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-layout layui-layout-admin home-admin">
+	<span class="layui-breadcrumb">
+		<a href="index" th:text="#{AppVersionManage}">APP版本管理</a>
+		<a href="" th:text="#{AppVersionDetail}">APP版本详情</a>
+	</span>
+    <div class="section-content" style="margin-top:20px;">
+        <form class="layui-form layui-form-pane" id="changestore">
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="#{AppId}">APP编号</label>
+                <div class="layui-input-inline" style="width:557px;">
+                    <input id="appId" type="text" name="appId" autocomplete="off" th:value="${param.appId}"
+                           class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="#{AppName}">APP命名</label>
+                <div class="layui-input-inline" style="width:557px;">
+                    <input id="appName" type="text" name="appName" th:value="${param.appName}" placeholder="请输入"
+                           autocomplete="off" class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="#{AppVersionCode}">APP版本编号</label>
+                <div class="layui-input-inline" style="width:557px;">
+                    <input type="text" name="versionCode" th:value="${param.versionCode}" placeholder="请输入"
+                           autocomplete="off" class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="#{AppVersionName}">APP版本命名</label>
+                <div class="layui-input-inline" style="width:500px;">
+                    <input type="text" name="versionName" th:value="${param.versionName}" placeholder="请输入"
+                           autocomplete="off" class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="#{AppUrl}">APP链接</label>
+                <div class="layui-input-inline" style="width:500px;">
+                    <input type="url" name="appUrl" th:value="${param.appUrl}" placeholder="请输入" autocomplete="off"
+                           class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="#{AppChangeLog}">APP改动日志</label>
+                <div class="layui-input-inline" style="width:500px;">
+                    <input type="text" name="changeLog" th:value="${param.changeLog}" placeholder="请输入"
+                           autocomplete="off" class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="#{AppUpdateAt}">APP添加时间</label>
+                <div class="layui-input-inline" style="width:500px;">
+                    <input type="text" name="updatedAt" th:value="${param.updatedAt}" placeholder="请输入"
+                           autocomplete="off" class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-form-item" id="forceUpgrade">
+                <label class="layui-form-label">APP是否强制升级</label>
+                <div class="layui-input-block">
+                    <input class="yes" type="radio" name="forceUpgrade" value="1"
+                           th:checked="${param.forceUpgrade}" title="强制升级" readonly="readonly">
+                    <input class="no" type="radio" name="forceUpgrade" value="0"
+                           th:checked="${param.forceUpgrade}" title="可选升级" readonly="readonly">
+                </div>
+            </div>
+            <!--<div class="layui-form-item">-->
+            <!--<label class="layui-form-label" th:text="#{AppForceUpgrade}">APP是否强制升级</label>-->
+            <!--<div class="layui-input-inline" style="width:500px;">-->
+            <!--<input type="text" name="forceUpgrade" th:value="${param.forceUpgrade}" placeholder="请输入"-->
+            <!--autocomplete="off" class="layui-input">-->
+            <!--</div>-->
+            <!--</div>-->
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="#{AppFileSize}">APP大小</label>
+                <div class="layui-input-inline" style="width:500px;">
+                    <input type="text" name="fileSize" th:value="${param.fileSize}" placeholder="请输入" autocomplete="off"
+                           class="layui-input" readonly="readonly">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="#{AppOs}">APP所属平台</label>
+                <div class="layui-input-inline" style="width:500px;">
+                    <select id="appOs" type="text" name="appOs" readonly="readonly">
+                        <option value="0" th:selected="${param.appOs == '0' } ">Android</option>
+                        <option value="1" th:selected="${param.appOs == '1' } ">IOS</option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <p class="layui-btn layui-inline" onclick="history.go(-1)" th:text="#{return}">返回</p>
+            </div>
+        </form>
+    </div>
+
+</div>
+<script src="../../layui/layui.js"></script>
+<script src="../../js/jquery-2.0.2.min.js"></script>
+<script src="../../js/jquery.page.js"></script>
+<script>
+    //JavaScript代码区域
+    /*layui.config({
+        base: '../../js/modules/' //你存放新模块的目录，注意，不是layui的模块目录
+    }).use('address'); //加载入口*/
+    layui.use(['element', 'form', 'laydate', 'layer'], function () {
+        var element = layui.element
+            , form = layui.form
+            , laydate = layui.laydate
+            , layer = layui.layer
+            , $ = layui.jquery
+    })
+
+</script>
+</body>

@@ -112,9 +112,17 @@ public class LogisticsTrackingServiceImpl implements LogisticsTrackingService {
 //                                .id(idService.getId())
                                 .remark(tracesBean.getRemark())
                                 .build();
-                        logisticCodeTracesService.saveOrUpdate(logisticCodeTraces, Wrappers.<LogisticCodeTraces>lambdaUpdate()
+                        if(logisticCodeTracesService.count(Wrappers.<LogisticCodeTraces>lambdaUpdate()
                                 .eq(LogisticCodeTraces::getLogisticId, logisticId)
-                                .eq(LogisticCodeTraces::getAcceptTime, acceptTime));
+                                .eq(LogisticCodeTraces::getAcceptTime, acceptTime))>0){
+                            logisticCodeTracesService.update(logisticCodeTraces, Wrappers.<LogisticCodeTraces>lambdaUpdate()
+                                    .eq(LogisticCodeTraces::getLogisticId, logisticId)
+                                    .eq(LogisticCodeTraces::getAcceptTime, acceptTime));
+                        }else{
+                            logisticCodeTraces.setId(idService.getId());
+                            logisticCodeTracesService.save(logisticCodeTraces);
+                        }
+
 
                     });
                     logisticCodeRecordService.saveOrUpdate(logisticCodeRecord);

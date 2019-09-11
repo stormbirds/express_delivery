@@ -7,7 +7,9 @@ import cn.stormbirds.expressDelivery.service.ISysUserService;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * <p>
@@ -44,5 +46,11 @@ public class AuthController {
 //    public ResultJson register(String username, String password){
 //        return ResultJson.ok(authService.register( username, password )) ;
 //    }
+
+    @RequestMapping(value = "/")
+    public ModelAndView index(){
+        ModelAndView modelAndView = new ModelAndView("index.html");
+        return modelAndView;
+    }
 
 }

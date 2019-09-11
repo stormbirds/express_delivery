@@ -26,14 +26,14 @@
                     <div class="layui-inline">
                         <label class="layui-form-label" th:text="快递单号">快递单号</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="logisticCode" class="layui-input">
+                            <input type="text" name="logisticCode" class="layui-input" id="getLogisticCode">
                         </div>
                     </div>
 
                     <div class="layui-inline">
                         <label class="layui-form-label" th:text="快递公司">快递公司</label>
                         <div class="layui-input-inline">
-                            <select name="shipperCode">
+                            <select name="shipperCode" id="getShipperCode">
                                 <option value="0"  selected="selected" th:text="所有">所有</option>
                                 <option value="YTO" th:text="圆通">圆通</option>
                                 <option value="ZTO" th:text="中通">中通</option>
@@ -43,7 +43,7 @@
                     <div class="layui-inline">
                         <label class="layui-form-label" th:text="物流状态">物流状态</label>
                         <div class="layui-input-inline areaInput">
-                            <select name="state" >
+                            <select name="state" id="getState">
                                 <option value="-1">全部</option>
                                 <option value="0">无轨迹</option>
                                 <option value="1">已揽收</option>
@@ -135,6 +135,70 @@
             </div>
         </div>
     </div>
+
+    <div class="changebox" id="changbox">
+        <form class="layui-form" id="changeform">
+            <input type="hidden" name="id" id="recordId"/>
+            <input type="hidden" name="reason" id="reason"/>
+            <input type="hidden" name="callback" id="callback"/>
+            <input type="hidden" name="eBusinessId" id="eBusinessId"/>
+            <div class="layui-inline">
+                <label class="layui-form-label" th:text="">快递单号：</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input " name="logisticCode" id="logisticCode">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="">快递公司编码：</label>
+                <div class="layui-input-block">
+                    <div  class="layui-inline">
+                        <select name="shipperCode" id="shipperCode">
+                            <option value="YTO" th:text="圆通">圆通</option>
+                            <option value="ZTO" th:text="中通">中通</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" th:text="物流状态">物流状态</label>
+                <div class="layui-input-inline areaInput">
+                    <select name="state" id="state">
+                        <option value="0" >无轨迹</option>
+                        <option value="1">已揽收</option>
+                        <option value="2">在途中</option>
+                        <option value="3">签收</option>
+                        <option value="4">问题件</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" th:text="快递订阅状态">快递订阅状态：</label>
+                <div class="layui-input-inline">
+                    <select name="success" id="success">
+                        <option value="0">订阅失败</option>
+                        <option value="1">订阅成功</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label" th:text="">预计送达时间：</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input chosedate" name="estimatedDeliveryTime" id="estimatedDeliveryTime">
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="changebox" id="cancel">
+        <form class="layui-form" id="cancelform">
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="#{OrderfromZhimacredit}">芝麻信用订单：</label>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="code" name="code">
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script src="../../layui/layui.js"></script>
@@ -161,10 +225,25 @@
             , type: 'datetime'
             , range: true
         });
+        laydate.render({
+            elem: '#estimatedDeliveryTime'
+            , type: 'datetime'
+        });
 
         $("#pageNum").val(1);
         query(1,20,-1,null,null);
-
+        $("#show").hide();
+        $(".top-main").show();
+        $("#show").click(function(){
+            $(this).hide();
+            $("#hide").show();
+            $(".top-main").fadeIn();
+        })
+        $("#hide").click(function(){
+            $(this).hide();
+            $("#show").show();
+            $(".top-main").fadeOut();
+        })
     });
 
 

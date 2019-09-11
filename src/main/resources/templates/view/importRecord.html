@@ -41,7 +41,7 @@
     <div class="section-content" style="margin-top:20px;">
         <form class="layui-form layui-form-pane" id="changestore">
             <div class="layui-form-item">
-                <label class="layui-form-label" id="excelfile" name="excelfile" th:text="">导入excel</label>
+                <!--<label class="layui-form-label" id="excelfile" name="excelfile" th:text="">导入excel</label>-->
                 <!--<div class="layui-input-inline" style="width:500px;">-->
                     <!--<div class="layui-input-inline" style="width: 310px;">-->
                         <!--<div class="file-loading">-->
@@ -53,6 +53,7 @@
             </div>
 
             <div class="layui-form-item">
+                <p class="layui-btn layui-inline" id="excelfile" th:text="">选择excel文件</p>
                 <p class="layui-btn layui-inline" id="add" th:text="">导入</p>
                 <p class="layui-btn layui-inline" onclick="history.go(-1)" th:text="#{return}">返回</p>
             </div>
@@ -81,10 +82,13 @@
             ,done: function(res){
                 //上传完毕回调
                 console.log("上传成功 ",res)
+                layer.msg("上传成功")
+                window.location.href ="expressTracking.html"
             }
             ,error: function(){
                 //请求异常回调
                 console.log("上传失败")
+                layer.msg("上传失败")
             }
         });
     });

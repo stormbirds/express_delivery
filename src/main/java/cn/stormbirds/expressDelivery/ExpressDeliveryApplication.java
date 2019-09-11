@@ -27,23 +27,22 @@ import java.util.List;
 
 @EnableAsync
 @SpringBootApplication
-public class ExpressDeliveryApplication extends WebMvcConfigurationSupport {
+public class ExpressDeliveryApplication /*extends WebMvcConfigurationSupport*/{
 
     public static void main(String[] args) {
         SpringApplication.run(ExpressDeliveryApplication.class, args);
     }
+
 //    @Override
-//    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-//        //1、定义一个convert转换消息的对象
-//        FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
-//        //2、添加fastjson的配置信息
-//        FastJsonConfig fastJsonConfig = new FastJsonConfig();
-//        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
-//        //3、在convert中添加配置信息
-//        fastConverter.setFastJsonConfig(fastJsonConfig);
-//        //4、将convert添加到converters中
-//        converters.add(fastConverter);
-//        //5、追加默认转换器
-//        super.addDefaultHttpMessageConverters(converters);
+//    protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+//        super.configureMessageConverters(converters);
+//                MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        SimpleModule simpleModule = new SimpleModule();
+//        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+//        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+//        objectMapper.registerModule(simpleModule);
+//        jackson2HttpMessageConverter.setObjectMapper(objectMapper);
+//        converters.add(jackson2HttpMessageConverter);
 //    }
 }

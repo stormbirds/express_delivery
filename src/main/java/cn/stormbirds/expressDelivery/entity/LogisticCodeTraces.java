@@ -4,10 +4,9 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.serializer.ToStringSerializer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -25,6 +24,8 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value="LogisticCodeTraces对象", description="")
+@NoArgsConstructor
+@AllArgsConstructor
 public class LogisticCodeTraces implements Serializable{
 
     private static final long serialVersionUID = -4729075392155520666L;
@@ -41,6 +42,8 @@ public class LogisticCodeTraces implements Serializable{
     private String acceptStation;
 
     @ApiModelProperty(value = "发生时间")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime acceptTime;
 
     @ApiModelProperty(value = "备注")

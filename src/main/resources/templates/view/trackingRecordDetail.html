@@ -14,6 +14,13 @@
         .layui-form-item .layui-inline{
             margin: 0;
         }
+        .layui-table-cell {
+            height: auto;
+            text-overflow: inherit;
+            overflow: visible;
+            white-space: normal;
+            word-wrap: break-word;
+        }
     </style>
 </head>
 <body class="layui-layout-body">
@@ -32,25 +39,31 @@
         //第一个实例
         table.render({
             elem: '#demo'
-            ,height: 312
             ,url: '/app/v1/queryTrackingTraces' //数据接口
             ,method: 'post'
             ,page: false //开启分页
             ,contentType: 'application/x-www-form-urlencoded'
             ,where: {logisticId: logisticId}
-            ,parseData: function(res){ //res 即为原始返回的数据
-                return {
-                    "code": res.code, //解析接口状态
-                    "msg": res.msg, //解析提示文本
-                    "count": res.data.length, //解析数据长度
-                    "data": res.data //解析数据列表
-                };
+            // ,parseData: function(res){ //res 即为原始返回的数据
+            //     return {
+            //         "code": res.code, //解析接口状态
+            //         "msg": res.msg, //解析提示文本
+            //         // "count": res.data.length, //解析数据长度
+            //         // "data": res.data //解析数据列表
+            //     };
+            // }
+            ,response: {
+                // statusName: 'status' //规定数据状态的字段名称，默认：code
+                statusCode: 200 //规定成功的状态码，默认：0
+                // ,msgName: 'hint' //规定状态信息的字段名称，默认：msg
+                // ,countName: 'total' //规定数据总数的字段名称，默认：count
+                // ,dataName: 'rows' //规定数据列表的字段名称，默认：data
             }
             ,cols: [[ //表头
-                {field: 'logisticId', title: '快递单号', width:80, sort: true, fixed: 'left'}
-                ,{field: 'acceptStation', title: '快递状态', width:80}
-                ,{field: 'acceptTime', title: '发生时间', width:80, sort: true}
-                ,{field: 'remark', title: '备注', width:80}
+                {field: 'logisticId', title: '快递单号'}
+                ,{field: 'acceptStation', title: '快递状态'}
+                ,{field: 'acceptTime', title: '发生时间'}
+                ,{field: 'remark', title: '备注'}
             ]]
         });
 
