@@ -8,7 +8,7 @@ layui.define(["form","jquery"],function(exports){
         var proHtml = '',that = this;
         $.get("../../js/modules/address.json", function (data) {
             for (var i = 0; i < data.length; i++) {
-                proHtml += '<option value="' + data[i].code + '">' + data[i].name + '</option>';
+                proHtml += '<option value="' + data[i].name + '">' + data[i].name + '</option>';
             }
             //初始化省数据
             $("select[name=province]").append(proHtml);
@@ -16,7 +16,7 @@ layui.define(["form","jquery"],function(exports){
             form.on('select(province)', function (proData) {
                 $("select[name=area]").html('<option value="">请选择县/区</option>');
                 var value = proData.value;
-                if (value > 0) {
+                if (value !== "") {
                     that.citys(data[$(this).index() - 1].childs);
                     $('#pthisname').html($(this).context.textContent);
                     province = $(this).context.textContent;
@@ -31,13 +31,13 @@ layui.define(["form","jquery"],function(exports){
     Address.prototype.citys = function(citys) {
         var cityHtml = '<option value="">请选择市</option>',that = this;
         for (var i = 0; i < citys.length; i++) {
-            cityHtml += '<option value="' + citys[i].code + '">' + citys[i].name + '</option>';
+            cityHtml += '<option value="' + citys[i].name + '">' + citys[i].name + '</option>';
         }
         $("select[name=city]").html(cityHtml).removeAttr("disabled");
         form.render();
         form.on('select(city)', function (cityData) {
             var value = cityData.value;
-            if (value > 0) {
+            if (value !== "") {
                 that.areas(citys[$(this).index() - 1].childs);
                 $('#cthisname').html($(this).context.textContent);
                 city = $(this).context.textContent;
@@ -51,12 +51,12 @@ layui.define(["form","jquery"],function(exports){
     Address.prototype.areas = function(areas) {
         var areaHtml = '<option value="">请选择县/区</option>';
         for (var i = 0; i < areas.length; i++) {
-            areaHtml += '<option value="' + areas[i].code + '">' + areas[i].name + '</option>';
+            areaHtml += '<option value="' + areas[i].name + '">' + areas[i].name + '</option>';
         }
         $("select[name=area]").html(areaHtml).removeAttr("disabled");
         form.on('select(area)', function (areaData) {
             var value = areaData.value;
-            if (value > 0) {
+            if (value !== "") {
                 $('#areathisname').html($(this).context.textContent);
                 area = $(this).context.textContent;
                 var address = province+city+area;

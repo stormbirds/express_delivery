@@ -1,5 +1,7 @@
 package cn.stormbirds.expressDelivery.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.serializer.ToStringSerializer;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -21,12 +23,15 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@NoArgsConstructor@AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @ApiModel(value="ExpressTracking对象", description="")
 public class ExpressTracking implements Serializable {
 
     private static final long serialVersionUID = 262560756964342662L;
 
+    @ApiModelProperty(value = "id")
+    @JSONField(serializeUsing= ToStringSerializer.class)
     private Long id;
 
     @ApiModelProperty(value = "发货平台在本系统中id对应user表id")

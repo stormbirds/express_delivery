@@ -3,6 +3,9 @@
 //                               itemNum, trackingNo, shipperCode, trackingStatus,logisticStatus) {
 function queryExpressTracking(data) {
     var view = "";
+    data['receiverProvince'] = data['province']
+    data['receiverCity']  = data['city']
+    data['receiverArea']  = data['area']
     $.ajax({
         type: "POST",
         url: "/app/v1/queryExpressTrackingRecord",
@@ -20,8 +23,10 @@ function queryExpressTracking(data) {
                 view += '<td>';
                 view += '<a class="layui-btn-sm detail'+i+'" onmouseenter="show(\'详情\',\'.detail'+i+'\')" onmouseleave="hide()" onclick="appVersionDetail(\'\')"><i class="layui-icon-log layui-icon"></i></a>';
                 view += '<a class="layui-btn-sm edit'+i+'" onmouseenter="show(\'编辑\', \'.edit'+i+'\')" onmouseleave="hide()"' +
-                    'onclick="editAppVersion(\''+list[i].appId+'\',\''+list[i].appName+'\',\''+list[i].versionCode+'\',' +
-                    '\''+list[i].versionName+'\',\''+list[i].appUrl+'\',\''+list[i].changeLog+'\',\''+list[i].updatedAt+'\',\''+list[i].forceUpgrade+'\',\''+list[i].fileSize+'\',\''+list[i].appOs+'\')"><i class="layui-icon-set-fill layui-icon"></i></a>';
+                    'onclick="editExpressTrackingRecord(\''+list[i].id+'\',\''+list[i].platformId+'\',\''+list[i].platformOrderId+'\',' +
+                    '\''+list[i].itemTitle+'\',\''+list[i].receiverName+'\',\''+list[i].receiverPhone+'\',\''+list[i].receiverProvince+'\',\''+list[i].receiverCity+
+                    '\',\''+list[i].receiverArea+'\',\''+list[i].receiverAddress+'\',\''+list[i].itemNum+'\',\''+list[i].trackingNo+'\',\''+list[i].shipperCode+'\',\''+
+                    list[i].trackingStatus+'\',\''+list[i].logisticStatus+'\')"><i class="layui-icon-set-fill layui-icon"></i></a>';
                 view += '<a class="layui-btn-sm del'+i+'" onmouseenter="show(\'删除\',\'.del'+i+'\')" onmouseleave="hide()" onclick="del(\''+list[i].appId+'\')"><i class="layui-icon-close-fill layui-icon"></i></a>';
 
                 view += '</td>';
@@ -53,9 +58,9 @@ function queryExpressTracking(data) {
                     pageNum: backData.data.current,
                     callBack: function (page) {
                         $("#pageNum").val(page);
-                        var data = $("#agentform").serializeObject();
+                        var data = $("#orderform").serializeObject();
                         data["pageNum"]=page
-                        getAllArticle( data);
+                        queryExpressTracking( data);
                     }
                 });
                 $("#pageValue").val(backData.data.current);
@@ -73,6 +78,75 @@ function show(data,className){
 }
 function hide(){
     layer.close(tip_index);
+}
+
+function editExpressTrackingRecord(id,platformId,platformOrderId,itemTitle,receiverName,receiverPhone,
+                                   receiverProvince,receiverCity,receiverArea,receiverAddress,itemNum,
+                                   trackingNo,shipperCode,trackingStatus,logisticStatus){
+    $("#recordId").val(id);
+    $("#platformId").val(platformId);
+    $("#platformOrderId").val(platformOrderId);
+    $("#itemTitle").val(itemTitle);
+    $("#receiverName").val(receiverName);
+    $("#receiverPhone").val(receiverPhone);
+    $("#receiverProvince").val(receiverProvince);
+    $("#receiverCity").val(receiverCity);
+    $("#receiverArea").val(receiverArea);
+    $("#receiverAddress").val(receiverAddress);
+    $("#itemNum").val(itemNum);
+    $("#trackingNo").val(trackingNo);
+
+    $('[id=shipperCode]').val(shipperCode)
+    $('[id=trackingStatus]').val(trackingStatus)
+    $('[id=logisticStatus]').val(logisticStatus)
+    layui.use('form', function () {
+        var form = layui.form;
+        form.render();
+    });
+
+    var that = this;
+    //多窗口模式，层叠置顶
+    layer.open({
+        type: 1 //此处以iframe举例
+        , title: '修改导入订单'
+        , area: ['600px','600px']
+        , shade: 0
+        , anim: 1
+        , btn: ['取消', '保存']
+        , maxmin: true
+        // , offset: [ '100px', '200px']
+        , content: $("#changbox")
+        , btn1: function () {
+            layer.closeAll();
+        }
+        , btn2: function () {
+            var loading = layer.load();
+            var data = $("#changeform").serialize();
+            console.log(data);
+            $.ajax({
+                type: "POST",
+                url: '/app/v1/editExpressTrackingRecord',
+                data: data,
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                success: function (backData) {
+                    if (backData.code != 200) {
+                        layer.msg(backData.msg);
+                    }else {
+                        queryExpressTracking($("#queryform").serializeObject());
+                        layer.msg(backData.message);
+                    }
+                    layer.close(loading);
+                },
+                error: function () {
+                    layer.msg('请求错误');
+                    layer.close(loading);
+                }
+            })
+        }
+    });
 }
 
 /*序列化转json*/

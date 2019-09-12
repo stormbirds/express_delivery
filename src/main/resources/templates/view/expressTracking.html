@@ -24,20 +24,20 @@
             <div class="">
                 <div class="order-top">
                     <div class="top-main">
-                        <form class="layui-form" id="orderform">
+                        <form class="layui-form" id="queryform">
                             <div class="layui-form-item layui-inline">
                                 <input type="text" style="display: none" class="layui-input chosedate" value="1" name="pageNum" >
                                 <input type="text" style="display: none" class="layui-input chosedate" value="20" name="pageSize" >
                                 <div class="layui-inline">
                                     <label class="layui-form-label" th:text="">平台订单：</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" class="layui-input chosedate" name="platformOrderId" id="platformOrderId">
+                                        <input type="text" class="layui-input chosedate" name="platformOrderId" id="getPlatformOrderId">
                                     </div>
                                 </div>
                                 <div class="layui-inline">
                                     <label class="layui-form-label" th:text="">物品名称：</label>
                                     <div class="layui-input-inline">
-                                        <input type="text" class="layui-input chosedate" name="itemTitle" id="itemTitle">
+                                        <input type="text" class="layui-input chosedate" name="itemTitle" id="getItemTitle">
                                     </div>
                                 </div>
                                 <div class="layui-inline">
@@ -55,17 +55,17 @@
                                 <div class="layui-form-item">
                                     <label class="layui-form-label">收货地址：</label>
                                     <div class="layui-input-inline areaInput">
-                                        <select id="receiverProvince" name="receiverProvince"  lay-filter="province" class="province">
+                                        <select id="getReceiverProvince" name="province"  lay-filter="province" class="province">
                                             <option value="">请选择省</option>
                                         </select>
                                     </div>
                                     <div class="layui-input-inline areaInput">
-                                        <select id="receiverCity" name="receiverCity" lay-filter="city" disabled>
+                                        <select id="getReceiverCity" name="city" lay-filter="city" disabled>
                                             <option value="">请选择市</option>
                                         </select>
                                     </div>
                                     <div class="layui-input-inline areaInput">
-                                        <select id="receiverArea"  name="receiverArea" lay-filter="area" disabled>
+                                        <select id="getReceiverArea"  name="area" lay-filter="area" disabled>
                                             <option value="">请选择区</option>
                                         </select>
                                     </div>
@@ -196,42 +196,106 @@
         </div>
     </div>
     <div class="changebox" id="changbox">
-        <form class="layui-form" id="changeform">
-            <input type="hidden" name="orderInfoId" id="orderId"/>
+        <form class="layui-form" style="width: 600px"  id="changeform">
+            <input type="hidden" name="id" id="recordId"/>
+            <input type="hidden" name="platformId" id="platformId"/>
             <div class="layui-form-item">
-                <label class="layui-form-label" th:text="#{OrderStatus}">订单状态：</label>
-                <div class="layui-input-block">
-                    <div id="zujie" class="layui-inline">
-                        <input class="can"  type="radio" name="orderStatus" value="1" th:title="#{CurrentlyRenting}" checked="">
-                    </div>
-                    <div id="back" class="layui-inline">
-                        <input class="not"  type="radio" name="orderStatus" value="2" th:title="#{Returned}">
-                    </div>
-                    <div id="undone" class="layui-inline">
-                        <input class="can"  type="radio" name="orderStatus" value="3" th:title="#{Undone}">
-                    </div>
-                    <input name="orderType" value="1" type="hidden">
-                    <!--<input class="not" type="radio" name="orderStatus" value="4" title="请求中">-->
-                </div>
-            </div>
-            <div class="layui-form-item" id="bkTime">
-                <label class="layui-form-label" th:text="#{ReturnTime}">归还时间：</label>
-                <div class="layui-input-block">
-                    <input class="time layui-input" name="bkTime" id="gettime" style="width: auto"/>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="changebox" id="cancel">
-        <form class="layui-form" id="cancelform">
-            <div class="layui-form-item">
-                <label class="layui-form-label" th:text="#{OrderfromZhimacredit}">芝麻信用订单：</label>
+                <label class="layui-form-label" th:text="">发货单号：</label>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="code" name="code">
+                    <input type="text" style="width: 400px" class="layui-input " name="platformOrderId" id="platformOrderId">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="">物品名称：</label>
+                <div class="layui-input-inline">
+                    <input type="text" style="width: 400px" class="layui-input " name="itemTitle" id="itemTitle">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="">收货人姓名：</label>
+                <div class="layui-input-inline">
+                    <input type="text" style="width: 400px" class="layui-input " name="receiverName" id="receiverName">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="">收货人电话：</label>
+                <div class="layui-input-inline">
+                    <input type="text" style="width: 400px" class="layui-input " name="receiverPhone" id="receiverPhone">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="">收货人省份：</label>
+                <div class="layui-input-inline">
+                    <input type="text" style="width: 400px" class="layui-input " name="receiverProvince" id="receiverProvince">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="">收货人城市：</label>
+                <div class="layui-input-inline">
+                    <input type="text" style="width: 400px" class="layui-input " name="receiverCity" id="receiverCity">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="">收货人地区：</label>
+                <div class="layui-input-inline">
+                    <input type="text" style="width: 400px" class="layui-input " name="receiverArea" id="receiverArea">
+                </div>
+            </div>
+
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="">详细收货地址：</label>
+                <div class="layui-input-inline">
+                    <input type="text" style="width: 400px" class="layui-input " name="receiverAddress" id="receiverAddress">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="">物品个数：</label>
+                <div class="layui-input-inline">
+                    <input type="text" style="width: 400px" class="layui-input " name="itemNum" id="itemNum">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="">物流编号：</label>
+                <div class="layui-input-inline">
+                    <input type="text" style="width: 400px" class="layui-input " name="trackingNo" id="trackingNo">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="">物流公司代码：</label>
+                <div class="layui-input-inline">
+                    <select name="shipperCode" style="width: 400px" id="shipperCode">
+                        <option value="YTO" th:text="">圆通</option>
+                        <option value="ZTO" th:text="">中通</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="">追踪状态</label>
+                <div class="layui-input-inline">
+                    <select name="trackingStatus" style="width: 400px" id="trackingStatus">
+                        <option value="0" th:text="录入">录入</option>
+                        <option value="1" th:text="订阅追踪中">订阅追踪中</option>
+                        <option value="2" th:text="追踪完成">追踪完成</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label" th:text="">快递状态</label>
+                <div class="layui-input-inline">
+                    <select name="logisticStatus" style="width: 400px" id="logisticStatus">
+                        <option value="0" th:text="只录入状态未知">只录入状态未知</option>
+                        <option value="1" th:text="订单状态正常">订单状态正常</option>
+                        <option value="2" th:text="订单状态异常">订单状态异常</option>
+                    </select>
                 </div>
             </div>
         </form>
     </div>
+
 </div>
 
 
@@ -265,11 +329,11 @@
         });
         form.on('submit(*)', function(data){
             $("#pageNum").val(1);
-            var data = $("#orderform").serializeObject();
+            var data = $("#queryform").serializeObject();
             queryExpressTracking(data);
             return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
         });
-        queryExpressTracking($("#orderform").serializeObject());
+        queryExpressTracking($("#queryform").serializeObject());
 
         $("#show").hide();
         $(".top-main").show();

@@ -23,11 +23,12 @@ function query(pageNum,pageSize,state,lgisticCode,shipperCode) {
 
                 view += '</td>';
 
-                view += '<td>'+(list[i].logisticCode==undefined? "" :list[i].logisticCode)+'</td>'/*快递单号*/
-                view += '<td>'+(list[i].shipperCode==undefined ? "" :list[i].shipperCode)+'</td>'/*快递公司编码*/
-                view += '<td>'+(list[i].state==undefined ? "" :list[i].state)+'</td>';/*快递状态*/
-                view += '<td>'+list[i].success+'</td>';/*快递订阅状态*/
-                view += '<td>'+(list[i].estimatedDeliveryTime==undefined? "":list[i].estimatedDeliveryTime)+'</td>';/*预计送达时间*/
+                view += '<td>'+(list[i].logisticCode===undefined? "" :list[i].logisticCode)+'</td>'/*快递单号*/
+                view += '<td>'+(list[i].shipperCode===undefined ? "" :list[i].shipperCode)+'</td>'/*快递公司编码*/
+
+                view += '<td>'+(list[i].state===undefined ? "" :getStateStr(list[i].state))+'</td>';/*快递状态*/
+                view += '<td>'+(list[i].success?"订阅成功":"订阅失败")+'</td>';/*快递订阅状态*/
+                view += '<td>'+(list[i].estimatedDeliveryTime===undefined? "":list[i].estimatedDeliveryTime)+'</td>';/*预计送达时间*/
             }
             $("#list").html(view);
 
@@ -61,6 +62,21 @@ function show(data,className){
 }
 function hide(){
     layer.close(tip_index);
+}
+
+function getStateStr(state) {
+    switch (state) {
+        case 0:
+            return "无轨迹"
+        case 1:
+            return "已揽收"
+        case 2:
+            return "在途中"
+        case 3:
+            return "签收"
+        case 4:
+            return "问题件"
+    }
 }
 
 function trackingRecordDetail(logisticId){
